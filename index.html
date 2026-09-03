@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V21 - Pusat Download File & Software</title>
+  <title>CloudVault V20 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
-  <meta name="application-name" content="CloudVault V21">
+  <meta name="application-name" content="CloudVault V20">
   <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
@@ -228,7 +228,7 @@
     <section class="max-w-6xl mx-auto px-4 pt-4">
       <div class="glass-card rounded-2xl p-4 border border-amber-500/15">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-          <div><div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-amber-500"></i><h2 class="text-sm font-bold">Site Settings V21</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola pengumuman publik dan mode maintenance.</p></div>
+          <div><div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-amber-500"></i><h2 class="text-sm font-bold">Site Settings V20</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola pengumuman publik dan mode maintenance.</p></div>
           <div class="flex flex-wrap gap-2">
             <span class="px-3 py-2 rounded-xl text-xs font-semibold border" :class="siteSettings.maintenance ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'" x-text="siteSettings.maintenance ? 'Maintenance ON' : 'Website Aktif'"></span>
             <button @click="openSiteSettings()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1.5"><i data-lucide="settings-2" class="w-3.5 h-3.5"></i> Pengaturan Situs</button>
@@ -311,27 +311,19 @@
     <!-- Search Mobile -->
     <div class="relative w-full md:hidden mb-4">
       <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-      <input type="text" x-model="searchQuery" @input="currentPage = 1" placeholder="Cari nama, deskripsi, versi, kategori, atau tag..." class="w-full pl-10 pr-10 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
-      <button x-show="searchQuery" @click="searchQuery=''; currentPage=1" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-white" aria-label="Hapus pencarian"><i data-lucide="x" class="w-4 h-4"></i></button>
-    </div>
-
-    <!-- Desktop Smart Search -->
-    <div class="relative hidden md:block max-w-2xl mx-auto mb-5">
-      <i data-lucide="search" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-      <input type="text" x-model="searchQuery" @input="currentPage = 1" placeholder="Cari nama, deskripsi, versi, kategori, atau tag..." class="w-full pl-11 pr-11 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-2xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-brand-500 shadow-sm">
-      <button x-show="searchQuery" @click="searchQuery=''; currentPage=1" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-white" aria-label="Hapus pencarian"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <input type="text" x-model="searchQuery" placeholder="Cari file..." class="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
     </div>
 
     <!-- Category Tabs & Sort Controls -->
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
       <div class="flex items-center space-x-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
-        <button @click="selectedCategory = 'Semua'; currentPage = 1" 
+        <button @click="selectedCategory = 'Semua'" 
                 :class="selectedCategory === 'Semua' ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white'"
                 class="px-3.5 py-1.5 rounded-xl text-xs font-medium border transition-all whitespace-nowrap">
           Semua
         </button>
         <template x-for="cat in categories" :key="cat">
-          <button @click="selectedCategory = cat; currentPage = 1" 
+          <button @click="selectedCategory = cat" 
                   :class="selectedCategory === cat ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white'"
                   class="px-3.5 py-1.5 rounded-xl text-xs font-medium border transition-all whitespace-nowrap">
             <span x-text="cat"></span>
@@ -341,12 +333,12 @@
 
       <div class="flex items-center gap-2 self-end sm:self-auto">
         <span class="text-slate-500 dark:text-slate-400 text-[11px]">Tag:</span>
-        <select x-model="selectedTag" @change="currentPage = 1" class="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
+        <select x-model="selectedTag" class="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
           <option value="Semua">Semua</option>
           <template x-for="tag in tags" :key="tag"><option :value="tag" x-text="tag"></option></template>
         </select>
         <span class="text-slate-500 dark:text-slate-400 text-[11px] ml-1">Urutan:</span>
-        <select x-model="sortBy" @change="currentPage = 1" class="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
+        <select x-model="sortBy" class="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
           <option value="newest">Terbaru</option>
           <option value="popular">Terpopuler</option>
           <option value="rating">Rating Tertinggi</option>
@@ -354,10 +346,10 @@
         </select>
       </div>
       <div class="flex items-center gap-2 w-full sm:w-auto">
-        <button @click="showFavoritesOnly = !showFavoritesOnly; currentPage = 1" :class="showFavoritesOnly ? 'bg-amber-500 text-white border-amber-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800'" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 whitespace-nowrap">
+        <button @click="showFavoritesOnly = !showFavoritesOnly" :class="showFavoritesOnly ? 'bg-amber-500 text-white border-amber-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800'" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 whitespace-nowrap">
           <i data-lucide="heart" class="w-3.5 h-3.5" :class="showFavoritesOnly ? 'fill-white' : ''"></i> Favorit
         </button>
-        <button @click="showRecentOnly = !showRecentOnly; currentPage = 1" :class="showRecentOnly ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800'" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 whitespace-nowrap">
+        <button @click="showRecentOnly = !showRecentOnly" :class="showRecentOnly ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800'" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 whitespace-nowrap">
           <i data-lucide="history" class="w-3.5 h-3.5"></i> Terakhir Dilihat
         </button>
       </div>
@@ -367,7 +359,7 @@
   <!-- Items Grid -->
   <main x-show="isAdminRoute || !siteSettings.maintenance" class="max-w-6xl mx-auto px-4 pb-24">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <template x-for="item in paginatedItems" :key="item.id">
+      <template x-for="item in filteredItems" :key="item.id">
         <div class="glass-card rounded-2xl p-5 hover:border-brand-500/40 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group relative overflow-hidden">
           
           <div>
@@ -659,7 +651,7 @@
   <div x-show="showAuthModal && (isAdminRoute || !isAdminRoute)" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showAuthModal = false">
       <h2 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Login Admin</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V21. Masukkan Admin Key yang tersimpan di Netlify Environment Variables. Setelah berhasil, key tidak disimpan di browser; sistem memakai sesi HttpOnly sementara.</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V18. Masukkan Admin Key yang tersimpan di Netlify Environment Variables. Setelah berhasil, key tidak disimpan di browser; sistem memakai sesi HttpOnly sementara.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
         <input type="password" x-model="inputToken" required placeholder="Masukkan Admin Key" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
@@ -695,8 +687,6 @@
         showFavoritesOnly: false,
         showRecentOnly: false,
         showHiddenOnly: false,
-        currentPage: 1,
-        pageSize: 9,
         favoriteIds: {},
         recentIds: [],
         isAdmin: false,
@@ -902,7 +892,7 @@
           this.showPostModal = false;
           if (this.isAdminRoute) {
             this.activeItem = null;
-            document.title = this.isAdmin ? 'Admin Center - CloudVault V21' : 'Admin Login - CloudVault V21';
+            document.title = this.isAdmin ? 'Admin Center - CloudVault V20' : 'Admin Login - CloudVault V20';
             this.showAuthModal = !this.isAdmin;
             this.$nextTick(() => lucide.createIcons());
             return;
@@ -921,7 +911,7 @@
               this.goHome();
             }
           } else {
-            document.title = "CloudVault V21 - Pusat Download File & Software";
+            document.title = "CloudVault V20 - Pusat Download File & Software";
           }
         },
 
@@ -939,7 +929,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
-          document.title = "CloudVault V21 - Pusat Download File & Software";
+          document.title = "CloudVault V20 - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -1072,13 +1062,10 @@
         get filteredItems() {
           let list = this.items.filter(item => {
             const matchesCategory = this.selectedCategory === 'Semua' || item.category === this.selectedCategory;
-            const searchable = [
-              item.title, item.description, item.version, item.category,
-              ...(Array.isArray(item.tags) ? item.tags : [])
-            ].map(v => String(v || '').toLowerCase()).join(' ');
+            const title = String(item.title || '');
+            const description = String(item.description || '');
             const q = this.searchQuery.toLowerCase().trim();
-            const terms = q.split(/\s+/).filter(Boolean);
-            const matchesSearch = !terms.length || terms.every(term => searchable.includes(term));
+            const matchesSearch = title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
             const matchesFavorite = !this.showFavoritesOnly || !!this.favoriteIds[item.id];
             const matchesRecent = !this.showRecentOnly || this.recentIds.includes(item.id);
             const matchesTag = this.selectedTag === 'Semua' || (Array.isArray(item.tags) && item.tags.includes(this.selectedTag));
@@ -1095,28 +1082,6 @@
           } else {
             return list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
           }
-        },
-
-        get totalPages() { return Math.max(1, Math.ceil(this.filteredItems.length / this.pageSize)); },
-        get paginatedItems() {
-          if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
-          const start = (this.currentPage - 1) * this.pageSize;
-          return this.filteredItems.slice(start, start + this.pageSize);
-        },
-        get pageStart() { return this.filteredItems.length ? ((this.currentPage - 1) * this.pageSize) + 1 : 0; },
-        get pageEnd() { return Math.min(this.currentPage * this.pageSize, this.filteredItems.length); },
-        get pageNumbers() {
-          const total = this.totalPages;
-          const pages = [];
-          const start = Math.max(1, Math.min(this.currentPage - 2, total - 4));
-          const end = Math.min(total, start + 4);
-          for (let i = start; i <= end; i++) pages.push(i);
-          return pages;
-        },
-        goPage(page) {
-          this.currentPage = Math.max(1, Math.min(Number(page) || 1, this.totalPages));
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          this.$nextTick(() => lucide.createIcons());
         },
 
         incrementDownload(item) {
