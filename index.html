@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V13 - Pusat Download File & Software</title>
+  <title>CloudVault V17 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
-  <meta name="application-name" content="CloudVault V13">
+  <meta name="application-name" content="CloudVault V17">
   <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
@@ -79,7 +79,7 @@
         </div>
         <div>
           <span class="font-black text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V12</span>
+          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V17</span>
         </div>
       </div>
 
@@ -111,7 +111,7 @@
     </div>
   </header>
 
-  <!-- V13 Private Admin Route -->
+  <!-- V17 Private Admin Route -->
   <section x-show="isAdminRoute && !isAdmin" x-cloak class="min-h-[75vh] flex items-center justify-center px-4 py-12">
     <div class="glass-card max-w-md w-full rounded-3xl p-7 border border-brand-500/20 text-center">
       <div class="mx-auto mb-4 w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
@@ -129,7 +129,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <div class="flex items-center gap-2">
-            <span class="px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black">V13</span>
+            <span class="px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black">V17</span>
             <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">Admin Center</h1>
           </div>
           <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Panel pengelolaan FileScriptHub. Area ini tidak ditampilkan di halaman utama.</p>
@@ -142,7 +142,7 @@
     </div>
   </section>
 
-  <!-- Admin Analytics Summary (V13) -->
+  <!-- Admin Analytics Summary (V17) -->
   <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -185,7 +185,7 @@
     </section>
   </template>
 
-  <!-- V13 Admin Quick Tools -->
+  <!-- V16 Admin Quick Tools -->
   <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-4">
       <div class="glass-card rounded-2xl p-4 border border-brand-500/15">
@@ -193,7 +193,7 @@
           <div>
             <div class="flex items-center gap-2">
               <i data-lucide="wrench" class="w-4 h-4 text-brand-500"></i>
-              <h2 class="text-sm font-bold">Admin Tools V13</h2>
+              <h2 class="text-sm font-bold">Admin Tools V16</h2>
             </div>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola database, backup, dan koneksi GitHub tanpa membuka credential.</p>
           </div>
@@ -213,6 +213,9 @@
             </label>
             <button @click="clearLocalAnalytics()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400 flex items-center gap-1.5">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Reset Lokal
+            </button>
+            <button @click="showHiddenOnly = !showHiddenOnly" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 flex items-center gap-1.5">
+              <i :data-lucide="showHiddenOnly ? 'eye-off' : 'eye'" class="w-3.5 h-3.5"></i> <span x-text="showHiddenOnly ? 'Semua File' : 'Tampilkan Status'">Tampilkan Status</span>
             </button>
           </div>
         </div>
@@ -293,6 +296,9 @@
                 </template>
                 <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700" x-text="item.category || 'General'"></span>
                 <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-brand-500/10 text-brand-500 dark:text-brand-400 border border-brand-500/20" x-text="item.version"></span>
+                <template x-if="isAdmin && item.status === 'draft'">
+                  <span class="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20">DRAFT</span>
+                </template>
               </div>
             </div>
 
@@ -330,6 +336,9 @@
                 <div class="flex items-center space-x-1">
                   <button @click="openEditModal(item)" class="py-1.5 px-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 rounded-lg text-[11px] font-medium border border-amber-500/20">Edit</button>
                   <button @click="deleteItem(item.id)" class="py-1.5 px-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg text-[11px] font-medium border border-red-500/20">Hapus</button>
+                  <button @click="toggleItemStatus(item)" class="py-1.5 px-2.5 bg-slate-500/10 hover:bg-slate-500/20 text-slate-600 dark:text-slate-300 rounded-lg text-[11px] font-medium border border-slate-500/20" :title="item.status === 'draft' ? 'Publikasikan' : 'Sembunyikan'">
+                    <i :data-lucide="item.status === 'draft' ? 'eye' : 'eye-off'" class="w-3 h-3 inline"></i>
+                  </button>
                 </div>
               </template>
             </div>
@@ -474,6 +483,22 @@
               </template>
             </select>
           </div>
+          <div>
+            <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Status</label>
+            <select x-model="formData.status" class="w-full px-2 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
+              <option value="published">Published</option>
+              <option value="draft">Draft / Sembunyikan</option>
+            </select>
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="flex items-center gap-2 text-xs font-semibold">
+                <input type="checkbox" x-model="formData.featured" class="rounded"> Tandai sebagai Featured
+              </label>
+              <label class="text-xs font-semibold">
+                Jadwalkan Publish
+                <input type="datetime-local" x-model="formData.publishAt" class="mt-1 w-full px-2 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-normal">
+              </label>
+            </div>
+          </div>
         </div>
 
         <div>
@@ -526,7 +551,7 @@
   <div x-show="showAuthModal && (isAdminRoute || !isAdminRoute)" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showAuthModal = false">
       <h2 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Login Admin</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V13. Masukkan Admin Key yang tersimpan di Netlify Environment Variables.</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V17. Masukkan Admin Key yang tersimpan di Netlify Environment Variables. Setelah berhasil, key tidak disimpan di browser; sistem memakai sesi HttpOnly sementara.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
         <input type="password" x-model="inputToken" required placeholder="Masukkan Admin Key" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
@@ -547,7 +572,6 @@
 
   <script>
     const API_ENDPOINT = "/.netlify/functions/admin-db";
-    const ADMIN_KEY_STORAGE = "cloudvault_v13_admin_key";
     const FILE_PATH = "database.json";
 
     function appData() {
@@ -559,6 +583,7 @@
         sortBy: 'newest',
         showFavoritesOnly: false,
         showRecentOnly: false,
+        showHiddenOnly: false,
         favoriteIds: {},
         recentIds: [],
         isAdmin: false,
@@ -576,10 +601,11 @@
         deferredInstallPrompt: null,
         newCategoryInput: '',
         loading: false,
-        formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', links: [] },
+        formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', status: 'published', featured: false, publishAt: '', links: [] },
 
         async initApp() {
-          this.adminKey = sessionStorage.getItem(ADMIN_KEY_STORAGE) || '';
+          this.adminKey = '';
+          this.adminSession = false;
           this.isAdminRoute = window.location.pathname.replace(/\/+$/, '') === '/admin';
           this.darkMode = localStorage.getItem('cloudvault_theme') !== 'light';
           this.restorePersonalization();
@@ -601,25 +627,21 @@
 
         async validateAdminSession() {
           this.isAdmin = false;
-          if (!this.adminKey) {
-            this.showAuthModal = this.isAdminRoute;
-            return false;
-          }
           try {
             const res = await fetch(API_ENDPOINT, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-Admin-Key': this.adminKey },
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
               body: JSON.stringify({ action: 'verify' })
             });
             const data = await res.json().catch(() => ({}));
             if (!res.ok || !data.ok) throw new Error(data.message || 'Sesi admin tidak valid.');
             this.isAdmin = true;
+            this.adminSession = true;
             this.showAuthModal = false;
             return true;
           } catch (_) {
-            sessionStorage.removeItem(ADMIN_KEY_STORAGE);
-            this.adminKey = '';
-            this.isAdmin = false;
+            this.adminSession = false;
             this.showAuthModal = this.isAdminRoute;
             return false;
           }
@@ -629,7 +651,7 @@
 
         restoreLocalStats() {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v13_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v17_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             this.items.forEach(item => {
               if (stats[item.id]?.downloads) item.downloads = Math.max(item.downloads || 0, stats[item.id].downloads);
             });
@@ -638,17 +660,26 @@
 
         persistLocalDownload(item) {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v13_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v17_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             stats[item.id] = { ...(stats[item.id] || {}), downloads: item.downloads || 0 };
-            localStorage.setItem('cloudvault_v13_stats', JSON.stringify(stats));
+            localStorage.setItem('cloudvault_v17_stats', JSON.stringify(stats));
           } catch (_) {}
         },
 
         restorePersonalization() {
           try {
-            this.favoriteIds = JSON.parse(localStorage.getItem('cloudvault_v13_favorites') || '{}');
-            this.recentIds = JSON.parse(localStorage.getItem('cloudvault_v13_recent') || '[]');
+            const read = (key, fallback) => {
+              const raw = localStorage.getItem(key);
+              if (raw !== null) return JSON.parse(raw);
+              return fallback;
+            };
+            const legacyFav = read('cloudvault_v15_favorites', {});
+            const legacyRecent = read('cloudvault_v15_recent', []);
+            this.favoriteIds = read('cloudvault_v17_favorites', legacyFav);
+            this.recentIds = read('cloudvault_v17_recent', legacyRecent);
             if (!Array.isArray(this.recentIds)) this.recentIds = [];
+            localStorage.setItem('cloudvault_v17_favorites', JSON.stringify(this.favoriteIds));
+            localStorage.setItem('cloudvault_v17_recent', JSON.stringify(this.recentIds));
           } catch (_) { this.favoriteIds = {}; this.recentIds = []; }
         },
 
@@ -657,13 +688,13 @@
         toggleFavorite(item) {
           this.favoriteIds[item.id] = !this.favoriteIds[item.id];
           if (!this.favoriteIds[item.id]) delete this.favoriteIds[item.id];
-          localStorage.setItem('cloudvault_v13_favorites', JSON.stringify(this.favoriteIds));
+          localStorage.setItem('cloudvault_v17_favorites', JSON.stringify(this.favoriteIds));
           this.$nextTick(() => lucide.createIcons());
         },
 
         rememberRecent(item) {
           this.recentIds = [item.id, ...this.recentIds.filter(id => id !== item.id)].slice(0, 10);
-          localStorage.setItem('cloudvault_v13_recent', JSON.stringify(this.recentIds));
+          localStorage.setItem('cloudvault_v17_recent', JSON.stringify(this.recentIds));
         },
 
         saveTheme() {
@@ -681,14 +712,14 @@
         },
 
         hasRated(item) {
-          try { return JSON.parse(localStorage.getItem('cloudvault_v13_rated') || '{}')[item.id] === true; } catch (_) { return false; }
+          try { return JSON.parse(localStorage.getItem('cloudvault_v17_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}')[item.id] === true; } catch (_) { return false; }
         },
 
         markRated(item) {
           try {
-            const rated = JSON.parse(localStorage.getItem('cloudvault_v13_rated') || '{}');
+            const rated = JSON.parse(localStorage.getItem('cloudvault_v17_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}');
             rated[item.id] = true;
-            localStorage.setItem('cloudvault_v13_rated', JSON.stringify(rated));
+            localStorage.setItem('cloudvault_v17_rated', JSON.stringify(rated));
           } catch (_) {}
         },
 
@@ -705,6 +736,7 @@
               this.categories = data.categories || ['Apps', 'Games', 'Tools', 'Other'];
             }
 
+            this.items = this.items.map(item => ({ ...item, status: item.status === 'draft' ? 'draft' : 'published', featured: item.featured === true, publishAt: typeof item.publishAt === 'string' ? item.publishAt : '' }));
             this.$nextTick(() => lucide.createIcons());
           } catch (e) {
             console.error("Gagal memuat file database JSON", e);
@@ -734,13 +766,21 @@
           return diffDays <= 7;
         },
 
+        isScheduledVisible(item) {
+          if (!item.publishAt) return true;
+          const t = new Date(item.publishAt).getTime();
+          return !Number.isFinite(t) || t <= Date.now();
+        },
+
+        isFeatured(item) { return item.featured === true; },
+
         handleRouting() {
           const path = window.location.pathname.replace(/\/+$/, '') || '/';
           this.isAdminRoute = path === '/admin';
           this.showPostModal = false;
           if (this.isAdminRoute) {
             this.activeItem = null;
-            document.title = this.isAdmin ? 'Admin Center - CloudVault V13' : 'Admin Login - CloudVault V13';
+            document.title = this.isAdmin ? 'Admin Center - CloudVault V17' : 'Admin Login - CloudVault V17';
             this.showAuthModal = !this.isAdmin;
             this.$nextTick(() => lucide.createIcons());
             return;
@@ -759,7 +799,7 @@
               this.goHome();
             }
           } else {
-            document.title = "CloudVault V13 - Pusat Download File & Software";
+            document.title = "CloudVault V17 - Pusat Download File & Software";
           }
         },
 
@@ -776,7 +816,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
-          document.title = "CloudVault V13 - Pusat Download File & Software";
+          document.title = "CloudVault V17 - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -828,9 +868,9 @@
 
         reportDeadLink(item) {
           try {
-            const reports = JSON.parse(localStorage.getItem('cloudvault_v13_reports') || '{}');
+            const reports = JSON.parse(localStorage.getItem('cloudvault_v17_reports') || localStorage.getItem('cloudvault_v15_reports') || '{}');
             reports[item.id] = { title: item.title, count: (reports[item.id]?.count || 0) + 1, lastReportedAt: new Date().toISOString() };
-            localStorage.setItem('cloudvault_v13_reports', JSON.stringify(reports));
+            localStorage.setItem('cloudvault_v17_reports', JSON.stringify(reports));
           } catch (_) {}
           Swal.fire({
             icon: 'success',
@@ -887,6 +927,10 @@
             showCancelButton: true
           }).then(async (res) => {
             if (res.isConfirmed) {
+              if (this.items.some(item => item.category === catName)) {
+                Swal.fire({ icon: 'info', title: 'Kategori Masih Digunakan', text: 'Pindahkan file dari kategori ini terlebih dahulu.', timer: 1800, showConfirmButton: false });
+                return;
+              }
               this.categories.splice(index, 1);
               await this.saveDatabase();
             }
@@ -911,7 +955,8 @@
             const matchesSearch = title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
             const matchesFavorite = !this.showFavoritesOnly || !!this.favoriteIds[item.id];
             const matchesRecent = !this.showRecentOnly || this.recentIds.includes(item.id);
-            return matchesCategory && matchesSearch && matchesFavorite && matchesRecent;
+            const matchesVisibility = this.isAdminRoute ? (!this.showHiddenOnly || item.status === 'draft') : item.status !== 'draft' && this.isScheduledVisible(item);
+            return matchesCategory && matchesSearch && matchesFavorite && matchesRecent && matchesVisibility;
           });
 
           if (this.sortBy === 'alphabet') {
@@ -931,6 +976,20 @@
           if (this.isAdmin) this.saveDatabase();
         },
 
+        async toggleItemStatus(item) {
+          if (!this.isAdmin || !this.adminSession) return;
+          const next = item.status === 'draft' ? 'published' : 'draft';
+          const label = next === 'draft' ? 'Sembunyikan file ini?' : 'Publikasikan file ini?';
+          const result = await Swal.fire({ icon: next === 'draft' ? 'warning' : 'question', title: label, text: next === 'draft' ? 'File tidak akan tampil di halaman publik, tetapi tidak dihapus.' : 'File akan kembali terlihat di halaman publik.', showCancelButton: true, confirmButtonText: next === 'draft' ? 'Sembunyikan' : 'Publikasikan', cancelButtonText: 'Batal' });
+          if (!result.isConfirmed) return;
+          const previous = item.status;
+          item.status = next;
+          const ok = await this.saveDatabase();
+          if (ok) Swal.fire({ icon: 'success', title: next === 'draft' ? 'File Disembunyikan' : 'File Dipublikasikan', timer: 1400, showConfirmButton: false });
+          else item.status = previous;
+          this.$nextTick(() => lucide.createIcons());
+        },
+
         async refreshDatabase() {
           await this.fetchData();
           Swal.fire({ icon: 'success', title: 'Database Diperbarui', text: 'Data terbaru berhasil dimuat.', timer: 1400, showConfirmButton: false });
@@ -938,7 +997,7 @@
 
         async testGitHubConnection() {
           try {
-            const res = await fetch(API_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Key': this.adminKey }, body: JSON.stringify({ action: 'health' }) });
+            const res = await fetch(API_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ action: 'health' }) });
             const data = await res.json().catch(() => ({}));
             if (!res.ok || !data.ok) throw new Error(data.message || 'Koneksi GitHub gagal.');
             Swal.fire({ icon: 'success', title: 'GitHub Terhubung', text: data.message || 'Repository dapat diakses.', timer: 1800, showConfirmButton: false });
@@ -946,10 +1005,10 @@
         },
 
         exportDatabase() {
-          const data = { categories: this.categories, items: this.items, version: '13.0.0', updatedAt: new Date().toISOString() };
+          const data = { categories: this.categories, items: this.items, version: '17.0.0', updatedAt: new Date().toISOString() };
           const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob); const a = document.createElement('a');
-          a.href = url; a.download = `filescripthub-backup-v12-${new Date().toISOString().slice(0,10)}.json`; a.click();
+          a.href = url; a.download = `filescripthub-backup-v17-${new Date().toISOString().slice(0,10)}.json`; a.click();
           setTimeout(() => URL.revokeObjectURL(url), 500);
         },
 
@@ -964,6 +1023,8 @@
               ids.add(item.id);
               item.downloads = Math.max(0, Number(item.downloads) || 0); item.views = Math.max(0, Number(item.views) || 0);
               item.rating = Math.min(5, Math.max(0, Number(item.rating) || 0));
+              item.status = item.status === 'draft' ? 'draft' : 'published';
+              item.links = Array.isArray(item.links) ? item.links.filter(link => link && typeof link.url === 'string' && /^https?:\/\//i.test(link.url)).map(link => ({ label: String(link.label || 'Download'), url: link.url.trim(), isAd: !!link.isAd })) : [];
             }
             const result = await Swal.fire({ icon: 'warning', title: 'Import database?', text: `Akan mengganti ${this.items.length} item dengan ${parsed.items.length} item.`, showCancelButton: true, confirmButtonText: 'Import & Simpan', cancelButtonText: 'Batal' });
             if (!result.isConfirmed) return;
@@ -978,7 +1039,7 @@
         clearLocalAnalytics() {
           Swal.fire({ icon: 'warning', title: 'Reset data lokal?', text: 'Favorit, riwayat, rating browser, laporan dan statistik lokal akan dihapus dari perangkat ini.', showCancelButton: true, confirmButtonText: 'Reset', cancelButtonText: 'Batal' }).then((r) => {
             if (!r.isConfirmed) return;
-            ['cloudvault_v13_stats','cloudvault_v13_favorites','cloudvault_v13_recent','cloudvault_v13_rated','cloudvault_v13_reports'].forEach(k => localStorage.removeItem(k));
+            ['cloudvault_v17_stats','cloudvault_v17_favorites','cloudvault_v17_recent','cloudvault_v17_rated','cloudvault_v17_reports','cloudvault_v16_stats','cloudvault_v16_favorites','cloudvault_v16_recent','cloudvault_v16_rated','cloudvault_v16_reports'].forEach(k => localStorage.removeItem(k));
             this.favoriteIds = {}; this.recentIds = [];
             Swal.fire({ icon: 'success', title: 'Data Lokal Direset', timer: 1400, showConfirmButton: false });
           });
@@ -991,11 +1052,13 @@
           this.deferredInstallPrompt = null; this.canInstall = false;
         },
 
-        toggleAdminModal() {
+        async toggleAdminModal() {
           if (this.isAdmin) {
-            sessionStorage.removeItem(ADMIN_KEY_STORAGE);
+            try { await fetch(API_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ action: 'logout' }) }); } catch (_) {}
             this.isAdmin = false;
+            this.adminSession = false;
             this.adminKey = '';
+            this.inputToken = '';
             this.showAuthModal = false;
             if (this.isAdminRoute) window.history.pushState({}, '', '/');
             this.isAdminRoute = false;
@@ -1012,20 +1075,22 @@
             const res = await fetch(API_ENDPOINT, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'X-Admin-Key': key },
-              body: JSON.stringify({ action: 'verify' })
+              credentials: 'same-origin',
+              body: JSON.stringify({ action: 'login' })
             });
             const data = await res.json().catch(() => ({}));
             if (!res.ok || !data.ok) throw new Error(data.message || 'Kunci admin tidak valid.');
-            this.adminKey = key;
-            sessionStorage.setItem(ADMIN_KEY_STORAGE, key);
+            this.adminKey = '';
+            this.adminSession = true;
             this.isAdmin = true;
             this.showAuthModal = false;
             this.inputToken = '';
-            Swal.fire({ icon: 'success', title: 'Mode Admin Aktif!', text: 'Akses admin berhasil diverifikasi.', timer: 1500, showConfirmButton: false });
+            Swal.fire({ icon: 'success', title: 'Mode Admin Aktif!', text: 'Sesi admin aman berhasil dibuat.', timer: 1500, showConfirmButton: false });
           } catch (e) {
             Swal.fire({ icon: 'error', title: 'Verifikasi Gagal', text: e.message });
           }
         },
+
         openCreateModal() {
           this.isEditMode = false;
           this.formData = {
@@ -1036,6 +1101,9 @@
             category: this.categories[0] || 'Tools',
             fileSize: '',
             description: '',
+            status: 'published',
+            featured: false,
+            publishAt: '',
             rating: 5.0,
             ratingCount: 1,
             links: [
@@ -1055,7 +1123,7 @@
             if (item.directLink) itemLinks.push({ label: 'Direct Fast Download', url: item.directLink, isAd: false });
           }
 
-          this.formData = { ...item, links: JSON.parse(JSON.stringify(itemLinks)) };
+          this.formData = { ...item, status: item.status === 'draft' ? 'draft' : 'published', featured: item.featured === true, publishAt: item.publishAt || '', links: JSON.parse(JSON.stringify(itemLinks)) };
           this.showFormModal = true;
           this.$nextTick(() => lucide.createIcons());
         },
@@ -1074,7 +1142,10 @@
               views: 0,
               rating: 5.0,
               ratingCount: 1,
-              createdAt: currentDate
+              createdAt: currentDate,
+              status: this.formData.status === 'draft' ? 'draft' : 'published',
+              featured: this.formData.featured === true,
+              publishAt: this.formData.publishAt || ''
             };
             this.items.unshift(newItemData);
           }
@@ -1108,16 +1179,16 @@
         },
 
         async saveDatabase() {
-          const fullData = { categories: this.categories, items: this.items, version: '13.0.0', updatedAt: new Date().toISOString() };
-          return await this.commitToGitHub(fullData, "Update CloudVault Database V13");
+          const fullData = { categories: this.categories, items: this.items, version: '17.0.0', updatedAt: new Date().toISOString() };
+          return await this.commitToGitHub(fullData, "Update FileScriptHub Database V17");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {
           try {
-            if (!this.isAdmin || !this.adminKey) throw new Error('Sesi admin belum aktif.');
+            if (!this.isAdmin || !this.adminSession) throw new Error('Sesi admin belum aktif.');
             const res = await fetch(API_ENDPOINT, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-Admin-Key': this.adminKey },
+              headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
               body: JSON.stringify({ action: 'save', data: fullDataObject, message: commitMessage })
             });
             const data = await res.json().catch(() => ({}));
