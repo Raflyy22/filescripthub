@@ -119,8 +119,8 @@ export default async (req) => {
       try { parsed = new URL(url); } catch { parsed = null; }
       if (!parsed || !['http:', 'https:'].includes(parsed.protocol)) { results.push({ title, url, ok: false, status: 400, message: 'URL tidak valid.' }); continue; }
       try {
-        let response = await fetch(parsed.href, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(7000), headers: { 'User-Agent': 'FileScriptHub-V20-LinkMonitor' } });
-        if (response.status === 405 || response.status === 403) response = await fetch(parsed.href, { method: 'GET', redirect: 'follow', signal: AbortSignal.timeout(7000), headers: { 'User-Agent': 'FileScriptHub-V20-LinkMonitor', Range: 'bytes=0-0' } });
+        let response = await fetch(parsed.href, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(7000), headers: { 'User-Agent': 'FileScriptHub-V22-LinkMonitor' } });
+        if (response.status === 405 || response.status === 403) response = await fetch(parsed.href, { method: 'GET', redirect: 'follow', signal: AbortSignal.timeout(7000), headers: { 'User-Agent': 'FileScriptHub-V22-LinkMonitor', Range: 'bytes=0-0' } });
         results.push({ title, url, ok: response.ok, status: response.status, finalUrl: response.url });
       } catch (error) { results.push({ title, url, ok: false, status: 0, message: String(error?.message || 'Request gagal').slice(0, 120) }); }
     }
@@ -131,7 +131,7 @@ export default async (req) => {
     if (!token) return json({ ok: false, message: 'GITHUB_TOKEN belum diset di Netlify.' }, 500);
     const api = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
     try {
-      const check = await fetch(api, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'FileScriptHub-V20' } });
+      const check = await fetch(api, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'FileScriptHub-V22' } });
       if (!check.ok) return json({ ok: false, message: `Repository GitHub tidak dapat diakses (${check.status}).` }, check.status);
       const info = await check.json();
       return json({ ok: true, message: `Terhubung ke ${info.full_name || `${owner}/${repo}`}.` });
@@ -142,13 +142,13 @@ export default async (req) => {
   if (!token) return json({ ok: false, message: 'GITHUB_TOKEN belum diset di Netlify.' }, 500);
   const path = 'database.json';
   const api = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path}`;
-  const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'FileScriptHub-V20' };
+  const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'FileScriptHub-V22' };
   try {
     const getRes = await fetch(api, { headers });
     if (!getRes.ok) return json({ ok: false, message: `Tidak dapat membaca database dari GitHub (${getRes.status}).` }, getRes.status);
     const file = await getRes.json();
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(body.data, null, 2))));
-    const putRes = await fetch(api, { method: 'PUT', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: body.message || 'Update FileScriptHub Database V20', content, sha: file.sha }) });
+    const putRes = await fetch(api, { method: 'PUT', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: body.message || 'Update FileScriptHub Database V22', content, sha: file.sha }) });
     if (!putRes.ok) return json({ ok: false, message: `GitHub menolak perubahan (${putRes.status}).` }, putRes.status);
     return json({ ok: true, message: 'Database berhasil disimpan ke GitHub.' });
   } catch (error) { return json({ ok: false, message: 'Terjadi kesalahan saat menghubungi GitHub.', detail: String(error?.message || error).slice(0, 300) }, 502); }
