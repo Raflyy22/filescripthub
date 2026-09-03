@@ -10,6 +10,8 @@
       "category": "Tools",
       "fileSize": "15 MB",
       "downloads": 540,
+      "rating": 4.8,
+      "ratingCount": 12,
       "createdAt": "2026-09-01",
       "links": [
         { "label": "Download Server 1 (Safelink)", "url": "https://safelink-example.com/botwa", "isAd": true },
@@ -25,6 +27,8 @@
       "category": "Apps",
       "fileSize": "45 MB",
       "downloads": 1420,
+      "rating": 4.9,
+      "ratingCount": 28,
       "createdAt": "2026-08-20",
       "links": [
         { "label": "Download Utama (Dengan Iklan)", "url": "https://safelink-example.com/xyz123", "isAd": true },
