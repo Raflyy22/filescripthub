@@ -1,8 +1,22 @@
 [
   {
     "id": "app-1",
+    "slug": "scriptbotwav1",
+    "title": "Script Bot WA V1 Pro",
+    "description": "Script bot WhatsApp serbaguna dengan fitur auto-responder, MD-multi device, dan antarmuka mudah.",
+    "version": "v1.0.0",
+    "category": "Tools",
+    "fileSize": "15 MB",
+    "downloads": 540,
+    "createdAt": "2026-09-01",
+    "directLink": "https://example.com/files/botwa.zip",
+    "adLink": "https://safelink-example.com/botwa"
+  },
+  {
+    "id": "app-2",
+    "slug": "pro-design-studio",
     "title": "Pro Design Studio",
-    "description": "Aplikasi editing grafis tingkat lanjut dengan performa cepat, aman, dan ringan.",
+    "description": "Aplikasi editing grafis tingkat lanjut dengan performa cepat dan ringan.",
     "version": "v2.4.0",
     "category": "Apps",
     "fileSize": "45 MB",
@@ -10,17 +24,5 @@
     "createdAt": "2026-08-20",
     "directLink": "https://example.com/files/pro-design.apk",
     "adLink": "https://safelink-example.com/xyz123"
-  },
-  {
-    "id": "app-2",
-    "title": "Cyber Racer HD",
-    "description": "Game balap futuristik dengan grafis memukau dan fitur unlocked penuh.",
-    "version": "v1.0.5",
-    "category": "Games",
-    "fileSize": "120 MB",
-    "downloads": 890,
-    "createdAt": "2026-08-25",
-    "directLink": "https://example.com/files/cyber-racer.apk",
-    "adLink": "https://safelink-example.com/abc456"
   }
 ]
