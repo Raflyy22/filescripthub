@@ -1,0 +1,22 @@
+[
+  {
+    "id": "app-1",
+    "title": "Pro Design Studio",
+    "description": "Aplikasi editing grafis tingkat lanjut dengan performa cepat, aman, dan ringan.",
+    "version": "v2.4.0",
+    "category": "Apps",
+    "downloads": 1420,
+    "directLink": "https://example.com/files/pro-design.apk",
+    "adLink": "https://safelink-example.com/xyz123"
+  },
+  {
+    "id": "app-2",
+    "title": "Cyber Racer HD",
+    "description": "Game balap futuristik dengan grafis memukau dan fitur unlocked penuh.",
+    "version": "v1.0.5",
+    "category": "Games",
+    "downloads": 890,
+    "directLink": "https://example.com/files/cyber-racer.apk",
+    "adLink": "https://safelink-example.com/abc456"
+  }
+]
