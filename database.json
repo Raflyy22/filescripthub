@@ -5,7 +5,9 @@
     "description": "Aplikasi editing grafis tingkat lanjut dengan performa cepat, aman, dan ringan.",
     "version": "v2.4.0",
     "category": "Apps",
+    "fileSize": "45 MB",
     "downloads": 1420,
+    "createdAt": "2026-08-20",
     "directLink": "https://example.com/files/pro-design.apk",
     "adLink": "https://safelink-example.com/xyz123"
   },
@@ -15,7 +17,9 @@
     "description": "Game balap futuristik dengan grafis memukau dan fitur unlocked penuh.",
     "version": "v1.0.5",
     "category": "Games",
+    "fileSize": "120 MB",
     "downloads": 890,
+    "createdAt": "2026-08-25",
     "directLink": "https://example.com/files/cyber-racer.apk",
     "adLink": "https://safelink-example.com/abc456"
   }
