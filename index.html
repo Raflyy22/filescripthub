@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault - Premium File Sharing</title>
+  <title>CloudVault - Modern File Sharing Platform</title>
 
-  <!-- PWA Web App Meta Tags untuk HP -->
+  <!-- PWA Meta Tags untuk Akses Cepat di HP -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
@@ -25,7 +25,7 @@
     }
   </script>
   
-  <!-- Lucide Icons, Alpine.js, SweetAlert2 -->
+  <!-- Lucide Icons, Alpine.js, & SweetAlert2 CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -33,89 +33,103 @@
   <style>
     [x-cloak] { display: none !important; }
     .glass {
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .glass-card {
-      background: rgba(30, 41, 59, 0.4);
+      background: rgba(30, 41, 59, 0.45);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
-    /* SweetAlert Dark Theme Customization */
+    /* SweetAlert Custom Dark Theme */
     .swal2-popup {
       background: #0f172a !important;
       color: #f8fafc !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 1rem !important;
+      border-radius: 1.25rem !important;
     }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-brand-500 selection:text-white" x-data="appData()" x-init="initApp()">
 
-  <!-- Sticky Header -->
+  <!-- Navigation Bar -->
   <header class="sticky top-0 z-40 glass border-b border-slate-800/80">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3 cursor-pointer" @click="resetFilter()">
-        <div class="p-2 bg-gradient-to-tr from-brand-600 to-indigo-500 rounded-xl shadow-lg shadow-brand-500/20">
-          <i data-lucide="share-2" class="w-5 h-5 text-white"></i>
+        <div class="p-2.5 bg-gradient-to-tr from-brand-600 to-indigo-500 rounded-xl shadow-lg shadow-brand-500/20">
+          <i data-lucide="cloud-download" class="w-5 h-5 text-white"></i>
         </div>
-        <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">CloudVault</span>
+        <span class="font-black text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">CloudVault</span>
       </div>
 
-      <!-- Desktop Search Bar -->
+      <!-- Desktop Search -->
       <div class="relative w-72 hidden md:block">
         <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        <input type="text" x-model="searchQuery" placeholder="Cari file/aplikasi..." class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-800 rounded-xl text-xs focus:outline-none focus:border-brand-500 text-white placeholder-slate-500">
+        <input type="text" x-model="searchQuery" placeholder="Cari file atau aplikasi..." class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-800 rounded-xl text-xs focus:outline-none focus:border-brand-500 text-white placeholder-slate-500 transition-all">
       </div>
 
-      <!-- Secret Admin Trigger -->
+      <!-- Secret Admin Toggle Button -->
       <button @click="toggleAdminModal()" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800 transition-colors text-slate-400 hover:text-white">
         <i data-lucide="shield-check" :class="isAdmin ? 'text-brand-500' : ''" class="w-5 h-5"></i>
       </button>
     </div>
   </header>
 
-  <!-- Hero & Filter Bar -->
+  <!-- Hero Banner & Filter Controls -->
   <section class="max-w-6xl mx-auto px-4 pt-8 pb-4 text-center">
     <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-3">
       <span class="flex h-2 w-2 rounded-full bg-brand-500 animate-pulse"></span>
-      <span>Direct & Fast Cloud Server</span>
+      <span>Direct Fast Download Hub</span>
     </div>
     
     <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-      Pusat Download Aplikasi & File
+      Platform Sharing File & Aplikasi
     </h1>
     <p class="text-slate-400 max-w-lg mx-auto text-xs sm:text-sm mb-6">
-      Unduh aplikasi dan file secara instan, aman, dan tanpa perlu mendaftar.
+      Unduh file pilihan dengan cepat. Bebas registrasi akun dan selalu diperbarui.
     </p>
 
     <!-- Mobile Search -->
-    <div class="relative w-full md:hidden mb-5">
+    <div class="relative w-full md:hidden mb-4">
       <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-      <input type="text" x-model="searchQuery" placeholder="Cari nama aplikasi..." class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+      <input type="text" x-model="searchQuery" placeholder="Cari file atau aplikasi..." class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
     </div>
 
-    <!-- Category Tabs -->
-    <div class="flex items-center justify-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
-      <template x-for="cat in categories" :key="cat">
-        <button @click="selectedCategory = cat" 
-                :class="selectedCategory === cat ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'"
-                class="px-4 py-1.5 rounded-xl text-xs font-medium border transition-all whitespace-nowrap">
-          <span x-text="cat"></span>
-        </button>
-      </template>
+    <!-- Category Tabs & Sort Dropdown -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 pb-2">
+      <!-- Categories -->
+      <div class="flex items-center space-x-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
+        <template x-for="cat in categories" :key="cat">
+          <button @click="selectedCategory = cat" 
+                  :class="selectedCategory === cat ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'"
+                  class="px-3.5 py-1.5 rounded-xl text-xs font-medium border transition-all whitespace-nowrap">
+            <span x-text="cat"></span>
+          </button>
+        </template>
+      </div>
+
+      <!-- Sorting Selector -->
+      <div class="flex items-center space-x-2 self-end sm:self-auto">
+        <span class="text-slate-400 text-[11px]">Urutkan:</span>
+        <select x-model="sortBy" class="bg-slate-900 border border-slate-800 text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
+          <option value="newest">Terbaru</option>
+          <option value="popular">Terpopuler</option>
+          <option value="alphabet">Nama (A-Z)</option>
+        </select>
+      </div>
     </div>
   </section>
 
-  <!-- Main App Grid -->
+  <!-- Items Grid -->
   <main class="max-w-6xl mx-auto px-4 pb-24">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <template x-for="item in filteredItems" :key="item.id">
         <div class="glass-card rounded-2xl p-5 hover:border-brand-500/40 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group relative overflow-hidden">
           
           <div>
+            <!-- Header Tag File -->
             <div class="flex items-start justify-between mb-3">
               <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700/50 group-hover:border-brand-500/30 group-hover:bg-brand-500/10 transition-colors">
                 <i data-lucide="package" class="w-6 h-6 text-brand-500"></i>
@@ -126,21 +140,29 @@
               </div>
             </div>
 
-            <h3 class="font-bold text-base text-white mb-1.5 group-hover:text-brand-400 transition-colors" x-text="item.title"></h3>
-            <p class="text-slate-400 text-xs line-clamp-2 mb-4 leading-relaxed" x-text="item.description"></p>
+            <!-- Title & Description -->
+            <h3 class="font-bold text-base text-white mb-1 group-hover:text-brand-400 transition-colors" x-text="item.title"></h3>
+            <p class="text-slate-400 text-xs line-clamp-2 mb-3 leading-relaxed" x-text="item.description"></p>
+
+            <!-- Metadata Info (Size, Downloads, Date) -->
+            <div class="flex items-center justify-between text-[11px] text-slate-500 mb-4 pb-3 border-b border-slate-800/60">
+              <span class="flex items-center space-x-1"><i data-lucide="hard-drive" class="w-3 h-3"></i> <span x-text="item.fileSize || 'N/A'"></span></span>
+              <span class="flex items-center space-x-1"><i data-lucide="download-cloud" class="w-3 h-3"></i> <span x-text="(item.downloads || 0) + 'x'"></span></span>
+              <span class="flex items-center space-x-1"><i data-lucide="calendar" class="w-3 h-3"></i> <span x-text="item.createdAt || 'Baru'"></span></span>
+            </div>
           </div>
 
-          <div class="space-y-2 pt-3 border-t border-slate-800/80">
-            <!-- Safelink Download Button -->
-            <a :href="item.adLink" target="_blank" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all shadow-md shadow-brand-600/20 active:scale-[0.98]">
+          <div class="space-y-2">
+            <!-- Download Button (Safelink) -->
+            <a :href="item.adLink" target="_blank" @click="incrementDownload(item)" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all shadow-md shadow-brand-600/20 active:scale-[0.98]">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              <span>Download (Safelink / Server 1)</span>
+              <span>Download (Server 1 / Safelink)</span>
             </a>
             
             <!-- Direct Download Button -->
-            <a :href="item.directLink" target="_blank" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all border border-slate-800 active:scale-[0.98]">
+            <a :href="item.directLink" target="_blank" @click="incrementDownload(item)" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all border border-slate-800 active:scale-[0.98]">
               <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
-              <span>Direct Link (Tanpa Iklan)</span>
+              <span>Direct Fast Download (Tanpa Iklan)</span>
             </a>
 
             <!-- Share & Admin Controls -->
@@ -150,15 +172,10 @@
                 <span>Bagikan</span>
               </button>
               
-              <!-- Khusus Admin: Edit & Delete Button -->
               <template x-if="isAdmin">
                 <div class="flex items-center space-x-1">
-                  <button @click="openEditModal(item)" class="py-1.5 px-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 rounded-lg text-[11px] font-medium border border-amber-500/20">
-                    Edit
-                  </button>
-                  <button @click="deleteItem(item.id)" class="py-1.5 px-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-[11px] font-medium border border-red-500/20">
-                    Hapus
-                  </button>
+                  <button @click="openEditModal(item)" class="py-1.5 px-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 rounded-lg text-[11px] font-medium border border-amber-500/20">Edit</button>
+                  <button @click="deleteItem(item.id)" class="py-1.5 px-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-[11px] font-medium border border-red-500/20">Hapus</button>
                 </div>
               </template>
             </div>
@@ -176,11 +193,11 @@
     </button>
   </div>
 
-  <!-- Modal Admin Auth -->
+  <!-- Admin Auth Modal -->
   <div x-show="showAuthModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-800" @click.away="showAuthModal = false">
-      <h2 class="text-lg font-bold mb-2 text-white">Login Admin Mode</h2>
-      <p class="text-xs text-slate-400 mb-5">Masukkan GitHub Personal Access Token (PAT) Anda untuk aktivasi mode pengelolaan HP.</p>
+      <h2 class="text-lg font-bold mb-2 text-white">Login Mode Admin</h2>
+      <p class="text-xs text-slate-400 mb-5">Masukkan Personal Access Token (PAT) GitHub untuk mengelola file dari HP.</p>
       
       <form @submit.prevent="saveAdminToken()">
         <div class="mb-4">
@@ -196,25 +213,29 @@
     </div>
   </div>
 
-  <!-- Modal Create / Edit File -->
+  <!-- Create / Edit Modal -->
   <div x-show="showFormModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showFormModal = false">
       <h2 class="text-lg font-bold mb-4 text-white" x-text="isEditMode ? 'Edit Data File' : 'Tambah File Baru'"></h2>
       
-      <form @submit.prevent="saveItem()" class="space-y-3.5">
+      <form @submit.prevent="saveItem()" class="space-y-3">
         <div>
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">Nama Aplikasi / File</label>
+          <label class="block text-[11px] font-medium text-slate-300 mb-1">Nama File / Aplikasi</label>
           <input type="text" x-model="formData.title" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-2">
           <div>
             <label class="block text-[11px] font-medium text-slate-300 mb-1">Versi</label>
-            <input type="text" x-model="formData.version" placeholder="v1.0.0" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+            <input type="text" x-model="formData.version" placeholder="v1.0.0" required class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-slate-300 mb-1">Ukuran File</label>
+            <input type="text" x-model="formData.fileSize" placeholder="25 MB" required class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
           </div>
           <div>
             <label class="block text-[11px] font-medium text-slate-300 mb-1">Kategori</label>
-            <select x-model="formData.category" class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+            <select x-model="formData.category" class="w-full px-2 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
               <option value="Apps">Apps</option>
               <option value="Games">Games</option>
               <option value="Tools">Tools</option>
@@ -250,7 +271,7 @@
   </div>
 
   <script>
-    // Konfigurasi Repositori GitHub Anda
+    // Konfigurasi Repositori GitHub
     const GITHUB_USER = "USERNAME_GITHUB_ANDA";
     const GITHUB_REPO = "NAMA_REPO_ANDA";
     const FILE_PATH = "database.json";
@@ -261,6 +282,7 @@
         categories: ['Semua', 'Apps', 'Games', 'Tools', 'Other'],
         selectedCategory: 'Semua',
         searchQuery: '',
+        sortBy: 'newest',
         isAdmin: false,
         showAuthModal: false,
         showFormModal: false,
@@ -268,7 +290,7 @@
         inputToken: '',
         ghToken: '',
         loading: false,
-        formData: { id: '', title: '', version: '', category: 'Apps', description: '', adLink: '', directLink: '' },
+        formData: { id: '', title: '', version: '', category: 'Apps', fileSize: '', description: '', adLink: '', directLink: '' },
 
         async initApp() {
           this.ghToken = localStorage.getItem('gh_admin_token') || '';
@@ -287,17 +309,30 @@
         },
 
         get filteredItems() {
-          return this.items.filter(item => {
+          let list = this.items.filter(item => {
             const matchesCategory = this.selectedCategory === 'Semua' || item.category === this.selectedCategory;
             const matchesSearch = item.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                                  item.description.toLowerCase().includes(this.searchQuery.toLowerCase());
             return matchesCategory && matchesSearch;
           });
+
+          if (this.sortBy === 'alphabet') {
+            return list.sort((a, b) => a.title.localeCompare(b.title));
+          } else if (this.sortBy === 'popular') {
+            return list.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+          } else {
+            return list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          }
         },
 
         resetFilter() {
           this.selectedCategory = 'Semua';
           this.searchQuery = '';
+          this.sortBy = 'newest';
+        },
+
+        incrementDownload(item) {
+          item.downloads = (item.downloads || 0) + 1;
         },
 
         copyShareLink(item) {
@@ -305,7 +340,7 @@
           Swal.fire({
             icon: 'success',
             title: 'Tautan Disalin!',
-            text: `Link tautan '${item.title}' berhasil disalin ke clipboard.`,
+            text: `Link tautan '${item.title}' telah disalin.`,
             timer: 1500,
             showConfirmButton: false
           });
@@ -318,7 +353,7 @@
               text: "Anda perlu memasukkan Token kembali untuk masuk ke dashboard admin.",
               icon: 'warning',
               showCancelButton: true,
-              confirmButtonText: 'Ya, Logout',
+              confirmButtonText: 'Logout',
               cancelButtonText: 'Batal'
             }).then((result) => {
               if (result.isConfirmed) {
@@ -345,7 +380,7 @@
 
         openCreateModal() {
           this.isEditMode = false;
-          this.formData = { id: '', title: '', version: '', category: 'Apps', description: '', adLink: '', directLink: '' };
+          this.formData = { id: '', title: '', version: '', category: 'Apps', fileSize: '', description: '', adLink: '', directLink: '' };
           this.showFormModal = true;
         },
 
@@ -358,15 +393,16 @@
         async saveItem() {
           this.loading = true;
           let updatedItems = [];
+          const currentDate = new Date().toISOString().split('T')[0];
 
           if (this.isEditMode) {
-            // Update item yang sudah ada
             updatedItems = this.items.map(item => item.id === this.formData.id ? { ...this.formData } : item);
           } else {
-            // Tambahkan item baru ke urutan teratas
             const newItemData = {
               id: 'app-' + Date.now(),
-              ...this.formData
+              ...this.formData,
+              downloads: 0,
+              createdAt: currentDate
             };
             updatedItems = [newItemData, ...this.items];
           }
@@ -378,7 +414,7 @@
             this.items = updatedItems;
             this.showFormModal = false;
             this.$nextTick(() => lucide.createIcons());
-            Swal.fire({ icon: 'success', title: 'Berhasil Disimpan!', text: 'Data telah diperbarui di repository GitHub.', timer: 2000 });
+            Swal.fire({ icon: 'success', title: 'Berhasil Disimpan!', timer: 2000, showConfirmButton: false });
           }
           this.loading = false;
         },
@@ -409,7 +445,7 @@
               headers: { 'Authorization': `token ${this.ghToken}` }
             });
             
-            if(!getFileRes.ok) throw new Error("Akses GitHub ditolak. Periksa Token Token Anda.");
+            if(!getFileRes.ok) throw new Error("Akses GitHub ditolak. Periksa Token PAT Anda.");
             
             const fileData = await getFileRes.json();
             const sha = fileData.sha;
@@ -435,7 +471,7 @@
               return false;
             }
           } catch (e) {
-            Swal.fire({ icon: 'error', title: 'Koneksi Error', text: e.message });
+            Swal.fire({ icon: 'error', title: 'Error', text: e.message });
             return false;
           }
         }
