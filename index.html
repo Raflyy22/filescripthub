@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V22 - Pusat Download File & Software</title>
+  <title>CloudVault V24 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
-  <meta name="application-name" content="CloudVault V22">
+  <meta name="application-name" content="CloudVault V24">
   <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
@@ -115,6 +115,14 @@
       </div>
     </div>
   </header>
+
+  <!-- V24 Offline Catalog Status -->
+  <div x-show="hasOfflineCache && !isAdminRoute" x-cloak class="max-w-6xl mx-auto px-4 pt-3">
+    <div class="rounded-xl px-3 py-2 border text-[10px] flex items-center justify-between gap-3" :class="online ? 'bg-emerald-500/5 border-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400'">
+      <span class="flex items-center gap-2"><i :data-lucide="online ? 'wifi' : 'wifi-off'" class="w-3.5 h-3.5"></i><span x-text="online ? 'Online • katalog terbaru tersimpan di perangkat' : 'Offline • menampilkan katalog terakhir yang tersimpan'" ></span></span>
+      <span x-show="lastSync" class="shrink-0 opacity-80" x-text="lastSync"></span>
+    </div>
+  </div>
 
   <!-- V18 Private Admin Route -->
   <section x-show="isAdminRoute && !isAdmin" x-cloak class="min-h-[75vh] flex items-center justify-center px-4 py-12">
@@ -252,12 +260,12 @@
     </section>
   </template>
 
-  <!-- V22 Site Settings -->
+  <!-- V24 Site Settings -->
   <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-4">
       <div class="glass-card rounded-2xl p-4 border border-amber-500/15">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-          <div><div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-amber-500"></i><h2 class="text-sm font-bold">Site Settings V22</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola pengumuman publik dan mode maintenance.</p></div>
+          <div><div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-amber-500"></i><h2 class="text-sm font-bold">Site Settings V24</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola pengumuman publik dan mode maintenance.</p></div>
           <div class="flex flex-wrap gap-2">
             <span class="px-3 py-2 rounded-xl text-xs font-semibold border" :class="siteSettings.maintenance ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'" x-text="siteSettings.maintenance ? 'Maintenance ON' : 'Website Aktif'"></span>
             <button @click="openSiteSettings()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1.5"><i data-lucide="settings-2" class="w-3.5 h-3.5"></i> Pengaturan Situs</button>
@@ -311,6 +319,16 @@
     <section class="max-w-6xl mx-auto px-4 pt-5">
       <div class="rounded-2xl px-4 py-3 border flex items-start gap-3" :class="siteSettings.announcementType === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' : siteSettings.announcementType === 'warning' ? 'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400' : siteSettings.announcementType === 'danger' ? 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400' : 'bg-brand-500/10 border-brand-500/20 text-brand-600 dark:text-brand-400'">
         <i data-lucide="megaphone" class="w-4 h-4 mt-0.5 shrink-0"></i><p class="text-xs font-semibold leading-relaxed" x-text="siteSettings.announcement"></p>
+      </div>
+    </section>
+  </template>
+
+  <!-- V24 Release Notes -->
+  <template x-if="!isAdminRoute && siteSettings.releaseNotesEnabled && siteSettings.releaseNotes && !siteSettings.maintenance">
+    <section class="max-w-6xl mx-auto px-4 pt-4">
+      <div class="rounded-2xl px-4 py-4 border border-purple-500/20 bg-purple-500/5 flex items-start gap-3">
+        <div class="p-2 rounded-xl bg-purple-500/10 text-purple-500 shrink-0"><i data-lucide="sparkles" class="w-4 h-4"></i></div>
+        <div class="min-w-0"><div class="text-[10px] uppercase tracking-wider font-black text-purple-500">Update terbaru • V24</div><p class="text-xs font-semibold leading-relaxed text-slate-700 dark:text-slate-200 mt-1 whitespace-pre-line" x-text="siteSettings.releaseNotes"></p></div>
       </div>
     </section>
   </template>
@@ -668,13 +686,18 @@
     </div>
   </div>
 
-  <!-- V22 Site Settings Modal -->
+  <!-- V24 Site Settings Modal -->
   <div x-show="showSettingsModal && isAdmin" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showSettingsModal = false">
-      <div class="flex items-center justify-between mb-5"><h2 class="text-lg font-bold text-slate-900 dark:text-white">Pengaturan Situs V22</h2><button @click="showSettingsModal=false" class="text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+      <div class="flex items-center justify-between mb-5"><h2 class="text-lg font-bold text-slate-900 dark:text-white">Pengaturan Situs V24</h2><button @click="showSettingsModal=false" class="text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button></div>
       <label class="flex items-center gap-2 text-xs font-semibold mb-3"><input type="checkbox" x-model="settingsForm.announcementEnabled" class="w-4 h-4"> Aktifkan pengumuman</label>
       <textarea x-model="settingsForm.announcement" maxlength="220" rows="3" placeholder="Contoh: File baru sudah tersedia!" class="w-full px-3 py-2.5 mb-3 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white"></textarea>
       <select x-model="settingsForm.announcementType" class="w-full px-3 py-2.5 mb-5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white"><option value="info">Info</option><option value="success">Success</option><option value="warning">Warning</option><option value="danger">Danger</option></select>
+      <div class="p-4 rounded-xl border border-purple-500/20 bg-purple-500/5 mb-4">
+        <label class="flex items-center gap-2 text-xs font-bold text-purple-500"><input type="checkbox" x-model="settingsForm.releaseNotesEnabled" class="w-4 h-4"> Tampilkan Update Terbaru V24</label>
+        <textarea x-model="settingsForm.releaseNotes" maxlength="600" rows="4" class="w-full mt-3 px-3 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="Contoh: V23 hadir dengan perbaikan performa dan fitur baru."></textarea>
+        <p class="text-[10px] text-slate-500 mt-2">Teks ini tampil di halaman publik dan mendukung baris baru.</p>
+      </div>
       <div class="p-4 rounded-xl border border-red-500/20 bg-red-500/5">
         <label class="flex items-center gap-2 text-xs font-bold text-red-500"><input type="checkbox" x-model="settingsForm.maintenance" class="w-4 h-4"> Aktifkan Maintenance Mode</label>
         <textarea x-model="settingsForm.maintenanceMessage" maxlength="180" rows="2" class="w-full mt-3 px-3 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="Pesan maintenance"></textarea>
@@ -747,13 +770,19 @@
         deferredInstallPrompt: null,
         newCategoryInput: '',
         loading: false,
+        online: navigator.onLine,
+        hasOfflineCache: false,
+        lastSync: '',
         linkCheckLoading: false,
         linkResults: [],
         formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', status: 'published', featured: false, publishAt: '', tagsText: '', links: [] },
-        siteSettings: { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.' },
-        settingsForm: { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: '' },
+        siteSettings: { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.', releaseNotes: '', releaseNotesEnabled: false },
+        settingsForm: { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: '', releaseNotes: '', releaseNotesEnabled: false },
 
         async initApp() {
+          this.online = navigator.onLine;
+          window.addEventListener('online', () => { this.online = true; this.$nextTick(() => lucide.createIcons()); });
+          window.addEventListener('offline', () => { this.online = false; this.$nextTick(() => lucide.createIcons()); });
           this.adminKey = '';
           this.adminSession = false;
           this.isAdminRoute = window.location.pathname.replace(/\/+$/, '') === '/admin';
@@ -802,7 +831,7 @@
 
         restoreLocalStats() {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v22_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v24_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             this.items.forEach(item => {
               if (stats[item.id]?.downloads) item.downloads = Math.max(item.downloads || 0, stats[item.id].downloads);
             });
@@ -811,9 +840,9 @@
 
         persistLocalDownload(item) {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v22_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v24_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             stats[item.id] = { ...(stats[item.id] || {}), downloads: item.downloads || 0 };
-            localStorage.setItem('cloudvault_v22_stats', JSON.stringify(stats));
+            localStorage.setItem('cloudvault_v24_stats', JSON.stringify(stats));
           } catch (_) {}
         },
 
@@ -828,11 +857,11 @@
             const legacyRecent = read('cloudvault_v15_recent', []);
             const v21Fav = read('cloudvault_v21_favorites', legacyFav);
             const v21Recent = read('cloudvault_v21_recent', legacyRecent);
-            this.favoriteIds = read('cloudvault_v22_favorites', v21Fav);
-            this.recentIds = read('cloudvault_v22_recent', v21Recent);
+            this.favoriteIds = read('cloudvault_v24_favorites', v21Fav);
+            this.recentIds = read('cloudvault_v24_recent', v21Recent);
             if (!Array.isArray(this.recentIds)) this.recentIds = [];
-            localStorage.setItem('cloudvault_v22_favorites', JSON.stringify(this.favoriteIds));
-            localStorage.setItem('cloudvault_v22_recent', JSON.stringify(this.recentIds));
+            localStorage.setItem('cloudvault_v24_favorites', JSON.stringify(this.favoriteIds));
+            localStorage.setItem('cloudvault_v24_recent', JSON.stringify(this.recentIds));
           } catch (_) { this.favoriteIds = {}; this.recentIds = []; }
         },
 
@@ -841,13 +870,13 @@
         toggleFavorite(item) {
           this.favoriteIds[item.id] = !this.favoriteIds[item.id];
           if (!this.favoriteIds[item.id]) delete this.favoriteIds[item.id];
-          localStorage.setItem('cloudvault_v22_favorites', JSON.stringify(this.favoriteIds));
+          localStorage.setItem('cloudvault_v24_favorites', JSON.stringify(this.favoriteIds));
           this.$nextTick(() => lucide.createIcons());
         },
 
         rememberRecent(item) {
           this.recentIds = [item.id, ...this.recentIds.filter(id => id !== item.id)].slice(0, 10);
-          localStorage.setItem('cloudvault_v22_recent', JSON.stringify(this.recentIds));
+          localStorage.setItem('cloudvault_v24_recent', JSON.stringify(this.recentIds));
         },
 
         restoreProfile() {
@@ -908,26 +937,24 @@
         },
 
         hasRated(item) {
-          try { return JSON.parse(localStorage.getItem('cloudvault_v22_rated') || localStorage.getItem('cloudvault_v21_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}')[item.id] === true; } catch (_) { return false; }
+          try { return JSON.parse(localStorage.getItem('cloudvault_v24_rated') || localStorage.getItem('cloudvault_v21_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}')[item.id] === true; } catch (_) { return false; }
         },
 
         markRated(item) {
           try {
-            const rated = JSON.parse(localStorage.getItem('cloudvault_v22_rated') || localStorage.getItem('cloudvault_v21_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}');
+            const rated = JSON.parse(localStorage.getItem('cloudvault_v24_rated') || localStorage.getItem('cloudvault_v21_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}');
             rated[item.id] = true;
-            localStorage.setItem('cloudvault_v22_rated', JSON.stringify(rated));
+            localStorage.setItem('cloudvault_v24_rated', JSON.stringify(rated));
           } catch (_) {}
         },
 
         async fetchData() {
-          try {
-            const res = await fetch(`database.json?cache=${Date.now()}`);
-            const data = await res.json();
-            
+          const cacheKey = 'cloudvault_v24_database_cache';
+          const applyData = (data) => {
             if (Array.isArray(data)) {
               this.items = data;
               this.categories = ['Apps', 'Games', 'Tools', 'Other'];
-              this.siteSettings = { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.' };
+              this.siteSettings = { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.', releaseNotes: '', releaseNotesEnabled: false };
             } else {
               this.items = data.items || [];
               this.categories = data.categories || ['Apps', 'Games', 'Tools', 'Other'];
@@ -936,13 +963,31 @@
             this.settingsForm = { ...this.siteSettings };
             if (this.profile?.category) this.selectedCategory = this.profile.category;
             if (this.profile?.sort) this.sortBy = this.profile.sort;
-
             this.items = this.items.map(item => ({ ...item, status: item.status === 'draft' ? 'draft' : 'published', featured: item.featured === true, publishAt: typeof item.publishAt === 'string' ? item.publishAt : '' }));
             this.tags = [...new Set(this.items.flatMap(item => Array.isArray(item.tags) ? item.tags : []))].sort((a,b) => a.localeCompare(b));
-            this.$nextTick(() => lucide.createIcons());
+          };
+          try {
+            const res = await fetch(`database.json?cache=${Date.now()}`, { cache: 'no-store' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            applyData(data);
+            this.online = true;
+            this.hasOfflineCache = true;
+            this.lastSync = new Date().toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+            try { localStorage.setItem(cacheKey, JSON.stringify({ savedAt: new Date().toISOString(), data })); } catch (_) {}
           } catch (e) {
-            console.error("Gagal memuat file database JSON", e);
+            this.online = navigator.onLine;
+            try {
+              const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+              if (!cached?.data) throw e;
+              applyData(cached.data);
+              this.hasOfflineCache = true;
+              this.lastSync = cached.savedAt ? new Date(cached.savedAt).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) : '';
+            } catch (_) {
+              console.error('Gagal memuat database online maupun cache lokal', e);
+            }
           }
+          this.$nextTick(() => lucide.createIcons());
         },
 
         // --- Computed Helper Admin Stats ---
@@ -982,7 +1027,7 @@
           this.showPostModal = false;
           if (this.isAdminRoute) {
             this.activeItem = null;
-            document.title = this.isAdmin ? 'Admin Center - CloudVault V22' : 'Admin Login - CloudVault V22';
+            document.title = this.isAdmin ? 'Admin Center - CloudVault V24' : 'Admin Login - CloudVault V24';
             this.showAuthModal = !this.isAdmin;
             this.$nextTick(() => lucide.createIcons());
             return;
@@ -1001,7 +1046,7 @@
               this.goHome();
             }
           } else {
-            document.title = "CloudVault V22 - Pusat Download File & Software";
+            document.title = "CloudVault V24 - Pusat Download File & Software";
           }
         },
 
@@ -1019,7 +1064,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
-          document.title = "CloudVault V22 - Pusat Download File & Software";
+          document.title = "CloudVault V24 - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -1071,9 +1116,9 @@
 
         reportDeadLink(item) {
           try {
-            const reports = JSON.parse(localStorage.getItem('cloudvault_v22_reports') || localStorage.getItem('cloudvault_v15_reports') || '{}');
+            const reports = JSON.parse(localStorage.getItem('cloudvault_v24_reports') || localStorage.getItem('cloudvault_v15_reports') || '{}');
             reports[item.id] = { title: item.title, count: (reports[item.id]?.count || 0) + 1, lastReportedAt: new Date().toISOString() };
-            localStorage.setItem('cloudvault_v22_reports', JSON.stringify(reports));
+            localStorage.setItem('cloudvault_v24_reports', JSON.stringify(reports));
           } catch (_) {}
           Swal.fire({
             icon: 'success',
@@ -1234,10 +1279,10 @@
         },
 
         exportDatabase() {
-          const data = { categories: this.categories, items: this.items, version: '22.0.0', updatedAt: new Date().toISOString(), settings: this.siteSettings };
+          const data = { categories: this.categories, items: this.items, version: '24.0.0', updatedAt: new Date().toISOString(), settings: this.siteSettings };
           const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob); const a = document.createElement('a');
-          a.href = url; a.download = `filescripthub-backup-v22-${new Date().toISOString().slice(0,10)}.json`; a.click();
+          a.href = url; a.download = `filescripthub-backup-v23-${new Date().toISOString().slice(0,10)}.json`; a.click();
           setTimeout(() => URL.revokeObjectURL(url), 500);
         },
 
@@ -1302,7 +1347,9 @@
             announcementType: ['info','success','warning','danger'].includes(this.settingsForm.announcementType) ? this.settingsForm.announcementType : 'info',
             announcementEnabled: this.settingsForm.announcementEnabled === true,
             maintenance: this.settingsForm.maintenance === true,
-            maintenanceMessage: String(this.settingsForm.maintenanceMessage || '').trim().slice(0, 180) || 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.'
+            maintenanceMessage: String(this.settingsForm.maintenanceMessage || '').trim().slice(0, 180) || 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.',
+            releaseNotes: String(this.settingsForm.releaseNotes || '').trim().slice(0, 600),
+            releaseNotesEnabled: this.settingsForm.releaseNotesEnabled === true
           };
           const ok = await this.saveDatabase();
           if (!ok) this.siteSettings = previous;
@@ -1316,7 +1363,7 @@
         clearLocalAnalytics() {
           Swal.fire({ icon: 'warning', title: 'Reset data lokal?', text: 'Favorit, riwayat, rating browser, laporan dan statistik lokal akan dihapus dari perangkat ini.', showCancelButton: true, confirmButtonText: 'Reset', cancelButtonText: 'Batal' }).then((r) => {
             if (!r.isConfirmed) return;
-            ['cloudvault_v22_stats','cloudvault_v22_favorites','cloudvault_v22_recent','cloudvault_v22_rated','cloudvault_v22_reports','cloudvault_v16_stats','cloudvault_v16_favorites','cloudvault_v16_recent','cloudvault_v16_rated','cloudvault_v16_reports'].forEach(k => localStorage.removeItem(k));
+            ['cloudvault_v24_stats','cloudvault_v24_favorites','cloudvault_v24_recent','cloudvault_v24_rated','cloudvault_v24_reports','cloudvault_v16_stats','cloudvault_v16_favorites','cloudvault_v16_recent','cloudvault_v16_rated','cloudvault_v16_reports'].forEach(k => localStorage.removeItem(k));
             this.favoriteIds = {}; this.recentIds = [];
             Swal.fire({ icon: 'success', title: 'Data Lokal Direset', timer: 1400, showConfirmButton: false });
           });
@@ -1481,8 +1528,9 @@
         },
 
         async saveDatabase() {
-          const fullData = { categories: this.categories, items: this.items, version: '22.0.0', updatedAt: new Date().toISOString(), settings: this.siteSettings };
-          return await this.commitToGitHub(fullData, "Update FileScriptHub Database V22");
+          const fullData = { categories: this.categories, items: this.items, version: '24.0.0', updatedAt: new Date().toISOString(), settings: this.siteSettings };
+          try { localStorage.setItem('cloudvault_v24_database_cache', JSON.stringify({ savedAt: new Date().toISOString(), data: fullData })); this.hasOfflineCache = true; } catch (_) {}
+          return await this.commitToGitHub(fullData, "Update FileScriptHub Database V24");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {
