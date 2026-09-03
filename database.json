@@ -67,13 +67,15 @@
       "tags": []
     }
   ],
-  "version": "20.0.0",
+  "version": "24.0.0",
   "updatedAt": "2026-09-04",
   "settings": {
     "announcement": "",
     "announcementType": "info",
     "announcementEnabled": false,
     "maintenance": false,
-    "maintenanceMessage": "Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi."
+    "maintenanceMessage": "Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.",
+    "releaseNotes": "",
+    "releaseNotesEnabled": false
   }
 }
