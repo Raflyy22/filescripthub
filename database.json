@@ -1,5 +1,10 @@
 {
-  "categories": ["Apps", "Games", "Tools", "Other"],
+  "categories": [
+    "Apps",
+    "Games",
+    "Tools",
+    "Other"
+  ],
   "items": [
     {
       "id": "app-1",
@@ -14,8 +19,16 @@
       "ratingCount": 12,
       "createdAt": "2026-09-01",
       "links": [
-        { "label": "Download Server 1 (Safelink)", "url": "https://safelink-example.com/botwa", "isAd": true },
-        { "label": "Direct Fast Download (Tanpa Iklan)", "url": "https://example.com/files/botwa.zip", "isAd": false }
+        {
+          "label": "Download Server 1 (Safelink)",
+          "url": "https://safelink-example.com/botwa",
+          "isAd": true
+        },
+        {
+          "label": "Direct Fast Download (Tanpa Iklan)",
+          "url": "https://example.com/files/botwa.zip",
+          "isAd": false
+        }
       ]
     },
     {
@@ -31,9 +44,19 @@
       "ratingCount": 28,
       "createdAt": "2026-08-20",
       "links": [
-        { "label": "Download Utama (Dengan Iklan)", "url": "https://safelink-example.com/xyz123", "isAd": true },
-        { "label": "Server Alternatif (Direct)", "url": "https://example.com/files/pro-design.apk", "isAd": false }
+        {
+          "label": "Download Utama (Dengan Iklan)",
+          "url": "https://safelink-example.com/xyz123",
+          "isAd": true
+        },
+        {
+          "label": "Server Alternatif (Direct)",
+          "url": "https://example.com/files/pro-design.apk",
+          "isAd": false
+        }
       ]
     }
-  ]
+  ],
+  "version": "10.0.0",
+  "updatedAt": "2026-09-03"
 }

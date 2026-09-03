@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V8 - Pusat Download File & Software</title>
+  <title>CloudVault V10 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
+  <meta name="application-name" content="CloudVault V10">
+  <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -63,6 +65,8 @@
     .scrollbar-none::-webkit-scrollbar { display: none; }
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+<link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%236366f1'/%3E%3Cpath d='M25 55h50L50 78 25 55Zm25-33v44' stroke='white' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans antialiased transition-colors duration-300" x-data="appData()" x-init="initApp()">
 
@@ -75,7 +79,7 @@
         </div>
         <div>
           <span class="font-black text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V8</span>
+          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V10</span>
         </div>
       </div>
 
@@ -88,7 +92,7 @@
       <!-- Actions -->
       <div class="flex items-center space-x-2">
         <!-- Theme Toggle -->
-        <button @click="darkMode = !darkMode" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-colors">
+        <button @click="darkMode = !darkMode; saveTheme()" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-colors">
           <i :data-lucide="darkMode ? 'sun' : 'moon'" class="w-4 h-4"></i>
         </button>
 
@@ -107,7 +111,7 @@
     </div>
   </header>
 
-  <!-- Admin Analytics Summary (V8 New) -->
+  <!-- Admin Analytics Summary (V10) -->
   <template x-if="isAdmin">
     <section class="max-w-6xl mx-auto px-4 pt-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -299,7 +303,13 @@
             </template>
           </div>
 
-          <!-- Rating & Report Action Buttons (V8 New) -->
+          <div class="flex items-center justify-end mb-3">
+            <button @click="sharePost(activeItem)" class="text-brand-500 hover:underline flex items-center space-x-1 font-medium text-xs">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i><span>Bagikan</span>
+            </button>
+          </div>
+
+          <!-- Rating & Report Action Buttons (V10) -->
           <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800 text-xs">
             <button @click="rateItem(activeItem)" class="text-amber-500 hover:underline flex items-center space-x-1 font-medium">
               <i data-lucide="star" class="w-3.5 h-3.5"></i>
@@ -431,10 +441,10 @@
   <div x-show="showAuthModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showAuthModal = false">
       <h2 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Login Admin</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Masukkan GitHub Personal Access Token Anda.</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Masukkan Admin Key yang sudah Anda set di Netlify Environment Variables.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
-        <input type="password" x-model="inputToken" required placeholder="ghp_xxxxxxxxxxxx" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
+        <input type="password" x-model="inputToken" required placeholder="Masukkan Admin Key" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
         <div class="flex space-x-2">
           <button type="button" @click="showAuthModal = false" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-medium">Batal</button>
           <button type="submit" class="flex-1 py-2 bg-brand-600 text-white rounded-xl text-xs font-medium">Verifikasi</button>
@@ -451,8 +461,8 @@
   </div>
 
   <script>
-    const GITHUB_USER = "USERNAME_GITHUB_ANDA";
-    const GITHUB_REPO = "NAMA_REPO_ANDA";
+    const API_ENDPOINT = "/.netlify/functions/admin-db";
+    const ADMIN_KEY_STORAGE = "cloudvault_v10_admin_key";
     const FILE_PATH = "database.json";
 
     function appData() {
@@ -471,17 +481,65 @@
         isEditMode: false,
         inputToken: '',
         ghToken: '',
+        adminKey: '',
         newCategoryInput: '',
         loading: false,
         formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', links: [] },
 
         async initApp() {
-          this.ghToken = localStorage.getItem('gh_admin_token') || '';
-          if (this.ghToken) this.isAdmin = true;
+          this.adminKey = sessionStorage.getItem(ADMIN_KEY_STORAGE) || '';
+          this.darkMode = localStorage.getItem('cloudvault_theme') !== 'light';
+          if (this.adminKey) this.isAdmin = true;
           await this.fetchData();
+          this.restoreLocalStats();
 
           this.handleRouting();
           window.addEventListener('popstate', () => this.handleRouting());
+        },
+
+        isConfigured() { return true; },
+
+        restoreLocalStats() {
+          try {
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v10_stats') || '{}');
+            this.items.forEach(item => {
+              if (stats[item.id]?.downloads) item.downloads = Math.max(item.downloads || 0, stats[item.id].downloads);
+            });
+          } catch (_) {}
+        },
+
+        persistLocalDownload(item) {
+          try {
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v10_stats') || '{}');
+            stats[item.id] = { ...(stats[item.id] || {}), downloads: item.downloads || 0 };
+            localStorage.setItem('cloudvault_v10_stats', JSON.stringify(stats));
+          } catch (_) {}
+        },
+
+        saveTheme() {
+          localStorage.setItem('cloudvault_theme', this.darkMode ? 'dark' : 'light');
+          this.$nextTick(() => lucide.createIcons());
+        },
+
+        async sharePost(item) {
+          const url = `${window.location.origin}/post/${item.slug || item.id}`;
+          try {
+            if (navigator.share) await navigator.share({ title: item.title, text: item.description || '', url });
+            else await navigator.clipboard.writeText(url);
+            Swal.fire({ icon: 'success', title: navigator.share ? 'Berhasil Dibagikan' : 'Link Disalin', timer: 1400, showConfirmButton: false });
+          } catch (_) {}
+        },
+
+        hasRated(item) {
+          try { return JSON.parse(localStorage.getItem('cloudvault_v10_rated') || '{}')[item.id] === true; } catch (_) { return false; }
+        },
+
+        markRated(item) {
+          try {
+            const rated = JSON.parse(localStorage.getItem('cloudvault_v10_rated') || '{}');
+            rated[item.id] = true;
+            localStorage.setItem('cloudvault_v10_rated', JSON.stringify(rated));
+          } catch (_) {}
         },
 
         async fetchData() {
@@ -573,6 +631,10 @@
         },
 
         async rateItem(item) {
+          if (this.hasRated(item)) {
+            Swal.fire({ icon: 'info', title: 'Sudah Memberi Rating', text: 'Browser ini sudah memberi rating untuk file tersebut.', timer: 1800, showConfirmButton: false });
+            return;
+          }
           const { value: stars } = await Swal.fire({
             title: 'Beri Rating File Ini',
             input: 'select',
@@ -589,6 +651,7 @@
 
             item.rating = parseFloat(newAvg.toFixed(1));
             item.ratingCount = newCount;
+            this.markRated(item);
 
             Swal.fire({ icon: 'success', title: 'Terima Kasih!', text: 'Rating Anda berhasil dikirim.', timer: 1500, showConfirmButton: false });
             if (this.isAdmin) await this.saveDatabase();
@@ -669,8 +732,10 @@
         get filteredItems() {
           let list = this.items.filter(item => {
             const matchesCategory = this.selectedCategory === 'Semua' || item.category === this.selectedCategory;
-            const matchesSearch = item.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                                 item.description.toLowerCase().includes(this.searchQuery.toLowerCase());
+            const title = String(item.title || '');
+            const description = String(item.description || '');
+            const q = this.searchQuery.toLowerCase().trim();
+            const matchesSearch = title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
             return matchesCategory && matchesSearch;
           });
 
@@ -687,30 +752,42 @@
 
         incrementDownload(item) {
           item.downloads = (item.downloads || 0) + 1;
+          this.persistLocalDownload(item);
+          if (this.isAdmin) this.saveDatabase();
         },
 
         toggleAdminModal() {
           if (this.isAdmin) {
-            localStorage.removeItem('gh_admin_token');
+            sessionStorage.removeItem(ADMIN_KEY_STORAGE);
             this.isAdmin = false;
-            this.ghToken = '';
+            this.adminKey = '';
             Swal.fire({ icon: 'info', title: 'Logout Admin', timer: 1500, showConfirmButton: false });
           } else {
             this.showAuthModal = true;
           }
         },
 
-        verifyAndSaveToken() {
-          if (this.inputToken.trim()) {
-            this.ghToken = this.inputToken.trim();
-            localStorage.setItem('gh_admin_token', this.ghToken);
+        async verifyAndSaveToken() {
+          const key = this.inputToken.trim();
+          if (!key) return;
+          try {
+            const res = await fetch(API_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-Admin-Key': key },
+              body: JSON.stringify({ action: 'verify' })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.ok) throw new Error(data.message || 'Kunci admin tidak valid.');
+            this.adminKey = key;
+            sessionStorage.setItem(ADMIN_KEY_STORAGE, key);
             this.isAdmin = true;
             this.showAuthModal = false;
             this.inputToken = '';
-            Swal.fire({ icon: 'success', title: 'Mode Admin Aktif!', timer: 1500, showConfirmButton: false });
+            Swal.fire({ icon: 'success', title: 'Mode Admin Aktif!', text: 'Akses admin berhasil diverifikasi.', timer: 1500, showConfirmButton: false });
+          } catch (e) {
+            Swal.fire({ icon: 'error', title: 'Verifikasi Gagal', text: e.message });
           }
         },
-
         openCreateModal() {
           this.isEditMode = false;
           this.formData = {
@@ -792,41 +869,32 @@
         },
 
         async saveDatabase() {
-          const fullData = {
-            categories: this.categories,
-            items: this.items
-          };
-          return await this.commitToGitHub(fullData, "Update CloudVault Database V8");
+          const fullData = { categories: this.categories, items: this.items, version: '10.0.0', updatedAt: new Date().toISOString() };
+          return await this.commitToGitHub(fullData, "Update CloudVault Database V10");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {
           try {
-            const getFileRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`, {
-              headers: { 'Authorization': `token ${this.ghToken}` }
+            if (!this.isAdmin || !this.adminKey) throw new Error('Sesi admin belum aktif.');
+            const res = await fetch(API_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-Admin-Key': this.adminKey },
+              body: JSON.stringify({ action: 'save', data: fullDataObject, message: commitMessage })
             });
-            if(!getFileRes.ok) throw new Error("Akses GitHub ditolak. Cek kembali Token.");
-            
-            const fileData = await getFileRes.json();
-            const sha = fileData.sha;
-            const updatedContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(fullDataObject, null, 2))));
-            
-            const putRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`, {
-              method: 'PUT',
-              headers: {
-                'Authorization': `token ${this.ghToken}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ message: commitMessage, content: updatedContentBase64, sha: sha })
-            });
-
-            return putRes.ok;
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.ok) throw new Error(data.message || 'Gagal menyimpan database.');
+            return true;
           } catch (e) {
-            Swal.fire({ icon: 'error', title: 'Error GitHub API', text: e.message });
+            Swal.fire({ icon: 'error', title: 'Gagal Menyimpan', text: e.message });
             return false;
           }
         }
+
       }
     }
+  </script>
+<script>
+    if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
   </script>
 </body>
 </html>
