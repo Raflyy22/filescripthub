@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V17 - Pusat Download File & Software</title>
+  <title>CloudVault V20 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
-  <meta name="application-name" content="CloudVault V17">
+  <meta name="application-name" content="CloudVault V20">
   <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
@@ -79,7 +79,7 @@
         </div>
         <div>
           <span class="font-black text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V17</span>
+          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V20</span>
         </div>
       </div>
 
@@ -111,7 +111,7 @@
     </div>
   </header>
 
-  <!-- V17 Private Admin Route -->
+  <!-- V18 Private Admin Route -->
   <section x-show="isAdminRoute && !isAdmin" x-cloak class="min-h-[75vh] flex items-center justify-center px-4 py-12">
     <div class="glass-card max-w-md w-full rounded-3xl p-7 border border-brand-500/20 text-center">
       <div class="mx-auto mb-4 w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
@@ -129,7 +129,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <div class="flex items-center gap-2">
-            <span class="px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black">V17</span>
+            <span class="px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black">V20</span>
             <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">Admin Center</h1>
           </div>
           <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Panel pengelolaan FileScriptHub. Area ini tidak ditampilkan di halaman utama.</p>
@@ -142,7 +142,7 @@
     </div>
   </section>
 
-  <!-- Admin Analytics Summary (V17) -->
+  <!-- Admin Analytics Summary (V18) -->
   <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -223,8 +223,82 @@
     </section>
   </template>
 
+  <!-- V20 Site Settings -->
+  <template x-if="isAdmin && isAdminRoute">
+    <section class="max-w-6xl mx-auto px-4 pt-4">
+      <div class="glass-card rounded-2xl p-4 border border-amber-500/15">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div><div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-amber-500"></i><h2 class="text-sm font-bold">Site Settings V20</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola pengumuman publik dan mode maintenance.</p></div>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-2 rounded-xl text-xs font-semibold border" :class="siteSettings.maintenance ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'" x-text="siteSettings.maintenance ? 'Maintenance ON' : 'Website Aktif'"></span>
+            <button @click="openSiteSettings()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1.5"><i data-lucide="settings-2" class="w-3.5 h-3.5"></i> Pengaturan Situs</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- V18 Bulk Management -->
+  <template x-if="isAdmin && isAdminRoute">
+    <section class="max-w-6xl mx-auto px-4 pt-4">
+      <div class="glass-card rounded-2xl p-4 border border-brand-500/15">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div><div class="flex items-center gap-2"><i data-lucide="layers-3" class="w-4 h-4 text-brand-500"></i><h2 class="text-sm font-bold">Kelola Banyak File</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Pilih beberapa file lalu ubah status atau Featured sekaligus.</p></div>
+          <div class="flex flex-wrap gap-2">
+            <button @click="selectVisibleItems()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900">Pilih Tampilan</button>
+            <button @click="clearSelection()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900">Batal Pilih</button>
+            <button @click="bulkSetStatus('published')" :disabled="!selectedIds.length || loading" class="px-3 py-2 rounded-xl text-xs font-semibold border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 disabled:opacity-40">Publikasikan</button>
+            <button @click="bulkSetStatus('draft')" :disabled="!selectedIds.length || loading" class="px-3 py-2 rounded-xl text-xs font-semibold border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 disabled:opacity-40">Jadikan Draft</button>
+            <button @click="bulkSetFeatured(true)" :disabled="!selectedIds.length || loading" class="px-3 py-2 rounded-xl text-xs font-semibold border border-purple-500/30 bg-purple-500/10 text-purple-600 dark:text-purple-400 disabled:opacity-40">Featured</button>
+            <button @click="bulkSetFeatured(false)" :disabled="!selectedIds.length || loading" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 disabled:opacity-40">Hapus Featured</button>
+            <span class="px-3 py-2 rounded-xl text-xs font-bold bg-brand-500/10 text-brand-500 border border-brand-500/20" x-text="selectedIds.length + ' dipilih'"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- V20 Link Monitor -->
+  <template x-if="isAdmin && isAdminRoute">
+    <section class="max-w-6xl mx-auto px-4 pt-4">
+      <div class="glass-card rounded-2xl p-4 border border-cyan-500/15">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div><div class="flex items-center gap-2"><i data-lucide="link-2" class="w-4 h-4 text-cyan-500"></i><h2 class="text-sm font-bold">Link Monitor V20</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Periksa link download dari server tanpa mengekspos GitHub Token.</p></div>
+          <button @click="checkAllLinks()" :disabled="linkCheckLoading" class="px-3 py-2 rounded-xl text-xs font-semibold border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 disabled:opacity-40 flex items-center gap-1.5"><i data-lucide="scan-line" class="w-3.5 h-3.5"></i><span x-text="linkCheckLoading ? 'Memeriksa...' : 'Cek Semua Link'"></span></button>
+        </div>
+        <div x-show="linkResults.length" x-cloak class="mt-4 space-y-2 max-h-80 overflow-auto">
+          <template x-for="result in linkResults" :key="result.url">
+            <div class="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+              <div class="min-w-0"><div class="text-xs font-semibold truncate" x-text="result.title"></div><div class="text-[10px] text-slate-500 truncate" x-text="result.url"></div></div>
+              <span class="shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg" :class="result.ok ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'" x-text="result.ok ? (result.status ? 'OK ' + result.status : 'OK') : (result.status ? 'ERROR ' + result.status : 'ERROR')"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template x-if="!isAdminRoute && siteSettings.announcementEnabled && siteSettings.announcement">
+    <section class="max-w-6xl mx-auto px-4 pt-5">
+      <div class="rounded-2xl px-4 py-3 border flex items-start gap-3" :class="siteSettings.announcementType === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400' : siteSettings.announcementType === 'warning' ? 'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400' : siteSettings.announcementType === 'danger' ? 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400' : 'bg-brand-500/10 border-brand-500/20 text-brand-600 dark:text-brand-400'">
+        <i data-lucide="megaphone" class="w-4 h-4 mt-0.5 shrink-0"></i><p class="text-xs font-semibold leading-relaxed" x-text="siteSettings.announcement"></p>
+      </div>
+    </section>
+  </template>
+
+  <template x-if="!isAdminRoute && siteSettings.maintenance">
+    <section class="max-w-6xl mx-auto px-4 pt-8">
+      <div class="glass-card rounded-3xl p-8 text-center border border-red-500/20">
+        <div class="mx-auto mb-4 w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center"><i data-lucide="construction" class="w-8 h-8 text-red-500"></i></div>
+        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">Sedang Maintenance</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 max-w-md mx-auto" x-text="siteSettings.maintenanceMessage"></p>
+        <button @click="window.location.href='/admin'" class="mt-5 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold">Area Admin</button>
+      </div>
+    </section>
+  </template>
+
   <!-- Hero Section -->
-  <section class="max-w-6xl mx-auto px-4 pt-8 pb-4">
+  <section x-show="isAdminRoute || !siteSettings.maintenance" class="max-w-6xl mx-auto px-4 pt-8 pb-4">
     <div class="text-center mb-6">
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">
         Pusat File & Software Terintegrasi
@@ -257,8 +331,13 @@
         </template>
       </div>
 
-      <div class="flex items-center space-x-2 self-end sm:self-auto">
-        <span class="text-slate-500 dark:text-slate-400 text-[11px]">Urutan:</span>
+      <div class="flex items-center gap-2 self-end sm:self-auto">
+        <span class="text-slate-500 dark:text-slate-400 text-[11px]">Tag:</span>
+        <select x-model="selectedTag" class="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
+          <option value="Semua">Semua</option>
+          <template x-for="tag in tags" :key="tag"><option :value="tag" x-text="tag"></option></template>
+        </select>
+        <span class="text-slate-500 dark:text-slate-400 text-[11px] ml-1">Urutan:</span>
         <select x-model="sortBy" class="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
           <option value="newest">Terbaru</option>
           <option value="popular">Terpopuler</option>
@@ -278,7 +357,7 @@
   </section>
 
   <!-- Items Grid -->
-  <main class="max-w-6xl mx-auto px-4 pb-24">
+  <main x-show="isAdminRoute || !siteSettings.maintenance" class="max-w-6xl mx-auto px-4 pb-24">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <template x-for="item in filteredItems" :key="item.id">
         <div class="glass-card rounded-2xl p-5 hover:border-brand-500/40 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group relative overflow-hidden">
@@ -290,6 +369,7 @@
               </div>
               
               <div class="flex items-center space-x-1.5">
+                <template x-if="isAdmin && isAdminRoute"><input type="checkbox" :checked="selectedIds.includes(item.id)" @change="toggleSelected(item.id)" class="w-4 h-4 rounded border-slate-400 text-brand-600 focus:ring-brand-500" title="Pilih file"></template>
                 <!-- Badge File Baru (V8 New) -->
                 <template x-if="isRecent(item.createdAt)">
                   <span class="text-[9px] font-black px-2 py-0.5 rounded bg-emerald-500 text-white animate-pulse">BARU!</span>
@@ -304,6 +384,9 @@
 
             <h3 class="font-bold text-base text-slate-900 dark:text-white mb-1 group-hover:text-brand-500 transition-colors cursor-pointer" @click="openPostModal(item)" x-text="item.title"></h3>
             <p class="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-3 leading-relaxed" x-text="item.description"></p>
+            <div x-show="Array.isArray(item.tags) && item.tags.length" class="flex flex-wrap gap-1.5 mb-3">
+              <template x-for="tag in item.tags.slice(0,4)" :key="tag"><span class="px-2 py-0.5 rounded-md text-[9px] font-semibold bg-brand-500/10 text-brand-500 border border-brand-500/20" x-text="'#' + tag"></span></template>
+            </div>
 
             <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800/60">
               <span class="flex items-center space-x-1"><i data-lucide="hard-drive" class="w-3 h-3"></i> <span x-text="item.fileSize || 'N/A'"></span></span>
@@ -504,6 +587,7 @@
         <div>
           <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Deskripsi Ringkas</label>
           <textarea x-model="formData.description" rows="2" required class="w-full px-3.5 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500"></textarea>
+          <input type="text" x-model="formData.tagsText" placeholder="Tag, pisahkan dengan koma. Contoh: bot, whatsapp, tools" class="w-full px-3.5 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
         </div>
 
         <!-- Section Link Unduhan Dinamis -->
@@ -547,11 +631,27 @@
     </div>
   </div>
 
+  <!-- V20 Site Settings Modal -->
+  <div x-show="showSettingsModal && isAdmin" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
+    <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showSettingsModal = false">
+      <div class="flex items-center justify-between mb-5"><h2 class="text-lg font-bold text-slate-900 dark:text-white">Pengaturan Situs V20</h2><button @click="showSettingsModal=false" class="text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+      <label class="flex items-center gap-2 text-xs font-semibold mb-3"><input type="checkbox" x-model="settingsForm.announcementEnabled" class="w-4 h-4"> Aktifkan pengumuman</label>
+      <textarea x-model="settingsForm.announcement" maxlength="220" rows="3" placeholder="Contoh: File baru sudah tersedia!" class="w-full px-3 py-2.5 mb-3 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white"></textarea>
+      <select x-model="settingsForm.announcementType" class="w-full px-3 py-2.5 mb-5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white"><option value="info">Info</option><option value="success">Success</option><option value="warning">Warning</option><option value="danger">Danger</option></select>
+      <div class="p-4 rounded-xl border border-red-500/20 bg-red-500/5">
+        <label class="flex items-center gap-2 text-xs font-bold text-red-500"><input type="checkbox" x-model="settingsForm.maintenance" class="w-4 h-4"> Aktifkan Maintenance Mode</label>
+        <textarea x-model="settingsForm.maintenanceMessage" maxlength="180" rows="2" class="w-full mt-3 px-3 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="Pesan maintenance"></textarea>
+        <p class="text-[10px] text-slate-500 mt-2">Halaman publik disembunyikan saat maintenance aktif. Area /admin tetap dapat diakses.</p>
+      </div>
+      <div class="flex gap-2 mt-5"><button @click="showSettingsModal=false" class="flex-1 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-semibold">Batal</button><button @click="saveSiteSettings()" :disabled="loading" class="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold">Simpan</button></div>
+    </div>
+  </div>
+
   <!-- Admin Auth Modal -->
   <div x-show="showAuthModal && (isAdminRoute || !isAdminRoute)" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showAuthModal = false">
       <h2 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Login Admin</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V17. Masukkan Admin Key yang tersimpan di Netlify Environment Variables. Setelah berhasil, key tidak disimpan di browser; sistem memakai sesi HttpOnly sementara.</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V18. Masukkan Admin Key yang tersimpan di Netlify Environment Variables. Setelah berhasil, key tidak disimpan di browser; sistem memakai sesi HttpOnly sementara.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
         <input type="password" x-model="inputToken" required placeholder="Masukkan Admin Key" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
@@ -579,6 +679,9 @@
         items: [],
         categories: [],
         selectedCategory: 'Semua',
+        selectedTag: 'Semua',
+        tags: [],
+        selectedIds: [],
         searchQuery: '',
         sortBy: 'newest',
         showFavoritesOnly: false,
@@ -592,6 +695,7 @@
         showFormModal: false,
         showPostModal: false,
         showCategoryModal: false,
+        showSettingsModal: false,
         activeItem: null,
         isEditMode: false,
         inputToken: '',
@@ -601,7 +705,11 @@
         deferredInstallPrompt: null,
         newCategoryInput: '',
         loading: false,
-        formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', status: 'published', featured: false, publishAt: '', links: [] },
+        linkCheckLoading: false,
+        linkResults: [],
+        formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', status: 'published', featured: false, publishAt: '', tagsText: '', links: [] },
+        siteSettings: { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.' },
+        settingsForm: { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: '' },
 
         async initApp() {
           this.adminKey = '';
@@ -651,7 +759,7 @@
 
         restoreLocalStats() {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v17_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v20_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             this.items.forEach(item => {
               if (stats[item.id]?.downloads) item.downloads = Math.max(item.downloads || 0, stats[item.id].downloads);
             });
@@ -660,9 +768,9 @@
 
         persistLocalDownload(item) {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v17_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v20_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             stats[item.id] = { ...(stats[item.id] || {}), downloads: item.downloads || 0 };
-            localStorage.setItem('cloudvault_v17_stats', JSON.stringify(stats));
+            localStorage.setItem('cloudvault_v20_stats', JSON.stringify(stats));
           } catch (_) {}
         },
 
@@ -675,11 +783,11 @@
             };
             const legacyFav = read('cloudvault_v15_favorites', {});
             const legacyRecent = read('cloudvault_v15_recent', []);
-            this.favoriteIds = read('cloudvault_v17_favorites', legacyFav);
-            this.recentIds = read('cloudvault_v17_recent', legacyRecent);
+            this.favoriteIds = read('cloudvault_v20_favorites', legacyFav);
+            this.recentIds = read('cloudvault_v20_recent', legacyRecent);
             if (!Array.isArray(this.recentIds)) this.recentIds = [];
-            localStorage.setItem('cloudvault_v17_favorites', JSON.stringify(this.favoriteIds));
-            localStorage.setItem('cloudvault_v17_recent', JSON.stringify(this.recentIds));
+            localStorage.setItem('cloudvault_v20_favorites', JSON.stringify(this.favoriteIds));
+            localStorage.setItem('cloudvault_v20_recent', JSON.stringify(this.recentIds));
           } catch (_) { this.favoriteIds = {}; this.recentIds = []; }
         },
 
@@ -688,13 +796,13 @@
         toggleFavorite(item) {
           this.favoriteIds[item.id] = !this.favoriteIds[item.id];
           if (!this.favoriteIds[item.id]) delete this.favoriteIds[item.id];
-          localStorage.setItem('cloudvault_v17_favorites', JSON.stringify(this.favoriteIds));
+          localStorage.setItem('cloudvault_v20_favorites', JSON.stringify(this.favoriteIds));
           this.$nextTick(() => lucide.createIcons());
         },
 
         rememberRecent(item) {
           this.recentIds = [item.id, ...this.recentIds.filter(id => id !== item.id)].slice(0, 10);
-          localStorage.setItem('cloudvault_v17_recent', JSON.stringify(this.recentIds));
+          localStorage.setItem('cloudvault_v20_recent', JSON.stringify(this.recentIds));
         },
 
         saveTheme() {
@@ -712,14 +820,14 @@
         },
 
         hasRated(item) {
-          try { return JSON.parse(localStorage.getItem('cloudvault_v17_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}')[item.id] === true; } catch (_) { return false; }
+          try { return JSON.parse(localStorage.getItem('cloudvault_v20_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}')[item.id] === true; } catch (_) { return false; }
         },
 
         markRated(item) {
           try {
-            const rated = JSON.parse(localStorage.getItem('cloudvault_v17_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}');
+            const rated = JSON.parse(localStorage.getItem('cloudvault_v20_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}');
             rated[item.id] = true;
-            localStorage.setItem('cloudvault_v17_rated', JSON.stringify(rated));
+            localStorage.setItem('cloudvault_v20_rated', JSON.stringify(rated));
           } catch (_) {}
         },
 
@@ -731,12 +839,16 @@
             if (Array.isArray(data)) {
               this.items = data;
               this.categories = ['Apps', 'Games', 'Tools', 'Other'];
+              this.siteSettings = { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.' };
             } else {
               this.items = data.items || [];
               this.categories = data.categories || ['Apps', 'Games', 'Tools', 'Other'];
+              this.siteSettings = { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.', ...(data.settings || {}) };
             }
+            this.settingsForm = { ...this.siteSettings };
 
             this.items = this.items.map(item => ({ ...item, status: item.status === 'draft' ? 'draft' : 'published', featured: item.featured === true, publishAt: typeof item.publishAt === 'string' ? item.publishAt : '' }));
+            this.tags = [...new Set(this.items.flatMap(item => Array.isArray(item.tags) ? item.tags : []))].sort((a,b) => a.localeCompare(b));
             this.$nextTick(() => lucide.createIcons());
           } catch (e) {
             console.error("Gagal memuat file database JSON", e);
@@ -780,7 +892,7 @@
           this.showPostModal = false;
           if (this.isAdminRoute) {
             this.activeItem = null;
-            document.title = this.isAdmin ? 'Admin Center - CloudVault V17' : 'Admin Login - CloudVault V17';
+            document.title = this.isAdmin ? 'Admin Center - CloudVault V20' : 'Admin Login - CloudVault V20';
             this.showAuthModal = !this.isAdmin;
             this.$nextTick(() => lucide.createIcons());
             return;
@@ -799,11 +911,12 @@
               this.goHome();
             }
           } else {
-            document.title = "CloudVault V17 - Pusat Download File & Software";
+            document.title = "CloudVault V20 - Pusat Download File & Software";
           }
         },
 
         openPostModal(item) {
+          if (!this.isAdminRoute && this.siteSettings.maintenance) return;
           this.activeItem = item;
           item.views = (item.views || 0) + 1;
           this.rememberRecent(item);
@@ -816,7 +929,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
-          document.title = "CloudVault V17 - Pusat Download File & Software";
+          document.title = "CloudVault V20 - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -868,9 +981,9 @@
 
         reportDeadLink(item) {
           try {
-            const reports = JSON.parse(localStorage.getItem('cloudvault_v17_reports') || localStorage.getItem('cloudvault_v15_reports') || '{}');
+            const reports = JSON.parse(localStorage.getItem('cloudvault_v20_reports') || localStorage.getItem('cloudvault_v15_reports') || '{}');
             reports[item.id] = { title: item.title, count: (reports[item.id]?.count || 0) + 1, lastReportedAt: new Date().toISOString() };
-            localStorage.setItem('cloudvault_v17_reports', JSON.stringify(reports));
+            localStorage.setItem('cloudvault_v20_reports', JSON.stringify(reports));
           } catch (_) {}
           Swal.fire({
             icon: 'success',
@@ -955,8 +1068,9 @@
             const matchesSearch = title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
             const matchesFavorite = !this.showFavoritesOnly || !!this.favoriteIds[item.id];
             const matchesRecent = !this.showRecentOnly || this.recentIds.includes(item.id);
+            const matchesTag = this.selectedTag === 'Semua' || (Array.isArray(item.tags) && item.tags.includes(this.selectedTag));
             const matchesVisibility = this.isAdminRoute ? (!this.showHiddenOnly || item.status === 'draft') : item.status !== 'draft' && this.isScheduledVisible(item);
-            return matchesCategory && matchesSearch && matchesFavorite && matchesRecent && matchesVisibility;
+            return matchesCategory && matchesSearch && matchesFavorite && matchesRecent && matchesTag && matchesVisibility;
           });
 
           if (this.sortBy === 'alphabet') {
@@ -1005,10 +1119,10 @@
         },
 
         exportDatabase() {
-          const data = { categories: this.categories, items: this.items, version: '17.0.0', updatedAt: new Date().toISOString() };
+          const data = { categories: this.categories, items: this.items, version: '20.0.0', updatedAt: new Date().toISOString() };
           const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob); const a = document.createElement('a');
-          a.href = url; a.download = `filescripthub-backup-v17-${new Date().toISOString().slice(0,10)}.json`; a.click();
+          a.href = url; a.download = `filescripthub-backup-v20-${new Date().toISOString().slice(0,10)}.json`; a.click();
           setTimeout(() => URL.revokeObjectURL(url), 500);
         },
 
@@ -1024,25 +1138,94 @@
               item.downloads = Math.max(0, Number(item.downloads) || 0); item.views = Math.max(0, Number(item.views) || 0);
               item.rating = Math.min(5, Math.max(0, Number(item.rating) || 0));
               item.status = item.status === 'draft' ? 'draft' : 'published';
+              item.featured = item.featured === true;
+              item.publishAt = typeof item.publishAt === 'string' ? item.publishAt : '';
+              item.tags = Array.isArray(item.tags) ? [...new Set(item.tags.map(t => String(t).trim().toLowerCase()).filter(Boolean))].slice(0, 12) : [];
               item.links = Array.isArray(item.links) ? item.links.filter(link => link && typeof link.url === 'string' && /^https?:\/\//i.test(link.url)).map(link => ({ label: String(link.label || 'Download'), url: link.url.trim(), isAd: !!link.isAd })) : [];
             }
             const result = await Swal.fire({ icon: 'warning', title: 'Import database?', text: `Akan mengganti ${this.items.length} item dengan ${parsed.items.length} item.`, showCancelButton: true, confirmButtonText: 'Import & Simpan', cancelButtonText: 'Batal' });
             if (!result.isConfirmed) return;
             this.categories = parsed.categories.map(x => String(x).trim()).filter(Boolean);
             this.items = parsed.items;
+            this.tags = [...new Set(this.items.flatMap(item => item.tags || []))].sort((a,b) => a.localeCompare(b));
             const ok = await this.saveDatabase();
             if (ok) Swal.fire({ icon: 'success', title: 'Import Berhasil', timer: 1600, showConfirmButton: false });
           } catch (e) { Swal.fire({ icon: 'error', title: 'Import Gagal', text: e.message || 'File JSON tidak dapat dibaca.' }); }
           event.target.value = '';
         },
 
+        toggleSelected(id) { this.selectedIds = this.selectedIds.includes(id) ? this.selectedIds.filter(x => x !== id) : [...this.selectedIds, id]; },
+        selectVisibleItems() { this.selectedIds = [...new Set(this.filteredItems.map(item => item.id))]; },
+        clearSelection() { this.selectedIds = []; },
+        async bulkSetStatus(status) {
+          if (!this.selectedIds.length) return;
+          const previous = this.items.map(item => ({ id: item.id, status: item.status }));
+          this.items = this.items.map(item => this.selectedIds.includes(item.id) ? { ...item, status } : item);
+          const ok = await this.saveDatabase();
+          if (!ok) this.items.forEach(item => { const p = previous.find(x => x.id === item.id); if (p) item.status = p.status; });
+          else { this.selectedIds = []; Swal.fire({ icon: 'success', title: 'Status Diperbarui', timer: 1400, showConfirmButton: false }); }
+        },
+        async bulkSetFeatured(value) {
+          if (!this.selectedIds.length) return;
+          const previous = this.items.map(item => ({ id: item.id, featured: item.featured }));
+          this.items = this.items.map(item => this.selectedIds.includes(item.id) ? { ...item, featured: value } : item);
+          const ok = await this.saveDatabase();
+          if (!ok) this.items.forEach(item => { const p = previous.find(x => x.id === item.id); if (p) item.featured = p.featured; });
+          else { this.selectedIds = []; Swal.fire({ icon: 'success', title: value ? 'Featured Aktif' : 'Featured Dihapus', timer: 1400, showConfirmButton: false }); }
+        },
+
+        openSiteSettings() {
+          this.settingsForm = { ...this.siteSettings };
+          this.showSettingsModal = true;
+          this.$nextTick(() => lucide.createIcons());
+        },
+
+        async saveSiteSettings() {
+          const previous = { ...this.siteSettings };
+          this.siteSettings = {
+            announcement: String(this.settingsForm.announcement || '').trim().slice(0, 220),
+            announcementType: ['info','success','warning','danger'].includes(this.settingsForm.announcementType) ? this.settingsForm.announcementType : 'info',
+            announcementEnabled: this.settingsForm.announcementEnabled === true,
+            maintenance: this.settingsForm.maintenance === true,
+            maintenanceMessage: String(this.settingsForm.maintenanceMessage || '').trim().slice(0, 180) || 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.'
+          };
+          const ok = await this.saveDatabase();
+          if (!ok) this.siteSettings = previous;
+          else {
+            this.settingsForm = { ...this.siteSettings };
+            this.showSettingsModal = false;
+            Swal.fire({ icon: 'success', title: 'Pengaturan Disimpan', timer: 1500, showConfirmButton: false });
+          }
+        },
+
         clearLocalAnalytics() {
           Swal.fire({ icon: 'warning', title: 'Reset data lokal?', text: 'Favorit, riwayat, rating browser, laporan dan statistik lokal akan dihapus dari perangkat ini.', showCancelButton: true, confirmButtonText: 'Reset', cancelButtonText: 'Batal' }).then((r) => {
             if (!r.isConfirmed) return;
-            ['cloudvault_v17_stats','cloudvault_v17_favorites','cloudvault_v17_recent','cloudvault_v17_rated','cloudvault_v17_reports','cloudvault_v16_stats','cloudvault_v16_favorites','cloudvault_v16_recent','cloudvault_v16_rated','cloudvault_v16_reports'].forEach(k => localStorage.removeItem(k));
+            ['cloudvault_v20_stats','cloudvault_v20_favorites','cloudvault_v20_recent','cloudvault_v20_rated','cloudvault_v20_reports','cloudvault_v16_stats','cloudvault_v16_favorites','cloudvault_v16_recent','cloudvault_v16_rated','cloudvault_v16_reports'].forEach(k => localStorage.removeItem(k));
             this.favoriteIds = {}; this.recentIds = [];
             Swal.fire({ icon: 'success', title: 'Data Lokal Direset', timer: 1400, showConfirmButton: false });
           });
+        },
+
+        async checkAllLinks() {
+          if (!this.isAdmin || !this.adminSession || this.linkCheckLoading) return;
+          this.linkCheckLoading = true;
+          this.linkResults = [];
+          try {
+            const links = [];
+            for (const item of this.items) {
+              for (const link of (item.links || [])) {
+                if (link?.url) links.push({ title: item.title, url: String(link.url) });
+              }
+            }
+            const res = await fetch(API_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ action: 'checkLinks', links: links.slice(0, 40) }) });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.ok) throw new Error(data.message || 'Gagal memeriksa link.');
+            this.linkResults = data.results || [];
+            Swal.fire({ icon: 'success', title: 'Pemeriksaan selesai', text: `${this.linkResults.filter(x => x.ok).length} link aktif dari ${this.linkResults.length}.`, timer: 2200, showConfirmButton: false });
+          } catch (e) {
+            Swal.fire({ icon: 'error', title: 'Link Monitor gagal', text: e.message });
+          } finally { this.linkCheckLoading = false; this.$nextTick(() => lucide.createIcons()); }
         },
 
         async installPWA() {
@@ -1104,6 +1287,7 @@
             status: 'published',
             featured: false,
             publishAt: '',
+            tagsText: '',
             rating: 5.0,
             ratingCount: 1,
             links: [
@@ -1123,7 +1307,7 @@
             if (item.directLink) itemLinks.push({ label: 'Direct Fast Download', url: item.directLink, isAd: false });
           }
 
-          this.formData = { ...item, status: item.status === 'draft' ? 'draft' : 'published', featured: item.featured === true, publishAt: item.publishAt || '', links: JSON.parse(JSON.stringify(itemLinks)) };
+          this.formData = { ...item, status: item.status === 'draft' ? 'draft' : 'published', featured: item.featured === true, publishAt: item.publishAt || '', tagsText: Array.isArray(item.tags) ? item.tags.join(', ') : '', links: JSON.parse(JSON.stringify(itemLinks)) };
           this.showFormModal = true;
           this.$nextTick(() => lucide.createIcons());
         },
@@ -1131,13 +1315,15 @@
         async saveItem() {
           this.loading = true;
           const currentDate = new Date().toISOString().split('T')[0];
+          const normalizedTags = [...new Set(String(this.formData.tagsText || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean))].slice(0, 12);
 
           if (this.isEditMode) {
-            this.items = this.items.map(item => item.id === this.formData.id ? { ...this.formData } : item);
+            this.items = this.items.map(item => item.id === this.formData.id ? { ...this.formData, tags: normalizedTags } : item);
           } else {
             const newItemData = {
               id: 'file-' + Date.now(),
               ...this.formData,
+              tags: normalizedTags,
               downloads: 0,
               views: 0,
               rating: 5.0,
@@ -1150,6 +1336,7 @@
             this.items.unshift(newItemData);
           }
 
+          this.tags = [...new Set(this.items.flatMap(item => item.tags || []))].sort((a,b) => a.localeCompare(b));
           const success = await this.saveDatabase();
 
           if (success) {
@@ -1179,8 +1366,8 @@
         },
 
         async saveDatabase() {
-          const fullData = { categories: this.categories, items: this.items, version: '17.0.0', updatedAt: new Date().toISOString() };
-          return await this.commitToGitHub(fullData, "Update FileScriptHub Database V17");
+          const fullData = { categories: this.categories, items: this.items, version: '20.0.0', updatedAt: new Date().toISOString() };
+          return await this.commitToGitHub(fullData, "Update FileScriptHub Database V20");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {
