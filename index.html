@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V4 - Modern File Sharing Platform</title>
+  <title>CloudVault - Single Post & Dynamic Route</title>
 
   <!-- PWA Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,7 +25,7 @@
     }
   </script>
   
-  <!-- CDN Libraries (Alpine.js, Lucide, SweetAlert2) -->
+  <!-- CDN Libraries -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -58,13 +58,13 @@
   <!-- Header Navigation -->
   <header class="sticky top-0 z-40 glass border-b border-slate-800/80">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-3 cursor-pointer" @click="resetFilter()">
+      <div class="flex items-center space-x-3 cursor-pointer" @click="goHome()">
         <div class="p-2.5 bg-gradient-to-tr from-brand-600 to-indigo-500 rounded-xl shadow-lg shadow-brand-500/20">
           <i data-lucide="cloud-download" class="w-5 h-5 text-white"></i>
         </div>
         <div>
           <span class="font-black text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V4</span>
+          <span class="text-[10px] font-bold text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">URL Route</span>
         </div>
       </div>
 
@@ -82,49 +82,22 @@
     </div>
   </header>
 
-  <!-- Hero Section & Realtime Stats -->
+  <!-- Hero Section -->
   <section class="max-w-6xl mx-auto px-4 pt-8 pb-4">
     <div class="text-center mb-6">
-      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-3">
-        <span class="flex h-2 w-2 rounded-full bg-brand-500 animate-pulse"></span>
-        <span>Fast Direct Download & Repositories</span>
-      </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
         Pusat Unduhan File & Software
       </h1>
       <p class="text-slate-400 max-w-lg mx-auto text-xs sm:text-sm">
-        Temukan file, modul, dan aplikasi terbaru. Cepat, stabil, dan bebas registrasi.
+        Unduh file favorit Anda atau bagikan tautan langsung per postingan file.
       </p>
-    </div>
-
-    <!-- Quick Stats Cards -->
-    <div class="grid grid-cols-3 gap-3 max-w-2xl mx-auto mb-6">
-      <div class="glass-card p-3 rounded-xl border border-slate-800/80 text-center">
-        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Total File</span>
-        <div class="text-base sm:text-lg font-bold text-white mt-0.5" x-text="items.length">0</div>
-      </div>
-      <div class="glass-card p-3 rounded-xl border border-slate-800/80 text-center">
-        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Total Unduhan</span>
-        <div class="text-base sm:text-lg font-bold text-brand-400 mt-0.5" x-text="totalDownloads">0</div>
-      </div>
-      <div class="glass-card p-3 rounded-xl border border-slate-800/80 text-center">
-        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Kategori</span>
-        <div class="text-base sm:text-lg font-bold text-emerald-400 mt-0.5" x-text="categories.length - 1">0</div>
-      </div>
-    </div>
-
-    <!-- Mobile Search Bar -->
-    <div class="relative w-full md:hidden mb-4">
-      <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-      <input type="text" x-model="searchQuery" placeholder="Cari file atau aplikasi..." class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
     </div>
 
     <!-- Category Tabs & Sort Controls -->
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-      <!-- Categories -->
       <div class="flex items-center space-x-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
         <template x-for="cat in categories" :key="cat">
-          <button @click="selectedCategory = cat; page = 1" 
+          <button @click="selectedCategory = cat" 
                   :class="selectedCategory === cat ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'"
                   class="px-3.5 py-1.5 rounded-xl text-xs font-medium border transition-all whitespace-nowrap">
             <span x-text="cat"></span>
@@ -132,7 +105,6 @@
         </template>
       </div>
 
-      <!-- Sorting Selector -->
       <div class="flex items-center space-x-2 self-end sm:self-auto">
         <span class="text-slate-400 text-[11px]">Urutan:</span>
         <select x-model="sortBy" class="bg-slate-900 border border-slate-800 text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
@@ -146,20 +118,11 @@
 
   <!-- Content Grid -->
   <main class="max-w-6xl mx-auto px-4 pb-24">
-    <!-- Empty State -->
-    <div x-show="paginatedItems.length === 0" class="text-center py-16 glass-card rounded-2xl border border-slate-800" x-cloak>
-      <i data-lucide="folder-open" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
-      <p class="text-slate-400 text-sm">Tidak ada file yang ditemukan.</p>
-      <button @click="resetFilter()" class="mt-3 text-xs text-brand-400 hover:underline">Reset Filter & Pencarian</button>
-    </div>
-
-    <!-- Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <template x-for="item in paginatedItems" :key="item.id">
+      <template x-for="item in filteredItems" :key="item.id">
         <div class="glass-card rounded-2xl p-5 hover:border-brand-500/40 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group relative overflow-hidden">
           
           <div>
-            <!-- Header Tag File -->
             <div class="flex items-start justify-between mb-3">
               <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700/50 group-hover:border-brand-500/30 group-hover:bg-brand-500/10 transition-colors">
                 <i data-lucide="package" class="w-6 h-6 text-brand-500"></i>
@@ -170,11 +133,9 @@
               </div>
             </div>
 
-            <!-- Title & Description -->
-            <h3 class="font-bold text-base text-white mb-1 group-hover:text-brand-400 transition-colors" x-text="item.title"></h3>
+            <h3 class="font-bold text-base text-white mb-1 group-hover:text-brand-400 transition-colors cursor-pointer" @click="openPostModal(item)" x-text="item.title"></h3>
             <p class="text-slate-400 text-xs line-clamp-2 mb-3 leading-relaxed" x-text="item.description"></p>
 
-            <!-- Metadata Info -->
             <div class="flex items-center justify-between text-[11px] text-slate-500 mb-4 pb-3 border-b border-slate-800/60">
               <span class="flex items-center space-x-1"><i data-lucide="hard-drive" class="w-3 h-3"></i> <span x-text="item.fileSize || 'N/A'"></span></span>
               <span class="flex items-center space-x-1"><i data-lucide="download-cloud" class="w-3 h-3"></i> <span x-text="(item.downloads || 0) + 'x'"></span></span>
@@ -183,23 +144,17 @@
           </div>
 
           <div class="space-y-2">
-            <!-- Download Button (Safelink) -->
-            <a :href="item.adLink" target="_blank" @click="incrementDownload(item)" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all shadow-md shadow-brand-600/20 active:scale-[0.98]">
-              <i data-lucide="download" class="w-3.5 h-3.5"></i>
-              <span>Download (Server 1 / Safelink)</span>
-            </a>
-            
-            <!-- Direct Download Button -->
-            <a :href="item.directLink" target="_blank" @click="incrementDownload(item)" class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all border border-slate-800 active:scale-[0.98]">
-              <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
-              <span>Direct Fast Download</span>
-            </a>
+            <!-- Open Detail Post Page Modal -->
+            <button @click="openPostModal(item)" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all active:scale-[0.98]">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              <span>Lihat Detail & Download</span>
+            </button>
 
             <!-- Share & Admin Controls -->
             <div class="flex items-center space-x-2 pt-1">
-              <button @click="copyShareLink(item)" class="flex-1 py-1.5 bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg text-[11px] font-medium transition-colors border border-slate-800 flex items-center justify-center space-x-1">
-                <i data-lucide="share-2" class="w-3 h-3"></i>
-                <span>Bagikan</span>
+              <button @click="copyPostLink(item)" class="flex-1 py-1.5 bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg text-[11px] font-medium transition-colors border border-slate-800 flex items-center justify-center space-x-1">
+                <i data-lucide="link" class="w-3 h-3"></i>
+                <span>Salin Link Post</span>
               </button>
               
               <template x-if="isAdmin">
@@ -214,54 +169,90 @@
         </div>
       </template>
     </div>
-
-    <!-- Pagination Controls -->
-    <div x-show="totalPages > 1" class="flex items-center justify-center space-x-2 mt-8" x-cloak>
-      <button @click="page--" :disabled="page === 1" class="px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900 text-xs font-medium text-slate-300 disabled:opacity-40">Previous</button>
-      <span class="text-xs text-slate-400 px-2" x-text="`Hal ${page} dari ${totalPages}`"></span>
-      <button @click="page++" :disabled="page >= totalPages" class="px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900 text-xs font-medium text-slate-300 disabled:opacity-40">Next</button>
-    </div>
   </main>
 
-  <!-- Admin Floating Add Button -->
-  <div x-show="isAdmin" class="fixed bottom-6 right-6 z-30" x-cloak>
-    <button @click="openCreateModal()" class="p-4 bg-brand-600 text-white rounded-2xl shadow-2xl shadow-brand-500/40 hover:bg-brand-700 active:scale-95 transition-all flex items-center justify-center border border-brand-400/30">
-      <i data-lucide="plus" class="w-6 h-6"></i>
-    </button>
+  <!-- MODAL / DETAIL POST PAGE (URL Dynamic Display) -->
+  <div x-show="showPostModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
+    <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-800 relative" @click.away="closePostModal()">
+      <button @click="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <template x-if="activeItem">
+        <div>
+          <div class="flex items-center space-x-2 mb-3">
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-brand-500/20 text-brand-400 border border-brand-500/30" x-text="activeItem.category"></span>
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700" x-text="activeItem.version"></span>
+          </div>
+
+          <h2 class="text-xl font-bold text-white mb-2" x-text="activeItem.title"></h2>
+          <p class="text-slate-300 text-xs leading-relaxed mb-6 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800" x-text="activeItem.description"></p>
+
+          <div class="grid grid-cols-3 gap-2 text-center mb-6">
+            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+              <span class="block text-[10px] text-slate-500">Ukuran</span>
+              <span class="text-xs font-semibold text-slate-200" x-text="activeItem.fileSize"></span>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+              <span class="block text-[10px] text-slate-500">Unduhan</span>
+              <span class="text-xs font-semibold text-brand-400" x-text="(activeItem.downloads || 0) + 'x'"></span>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+              <span class="block text-[10px] text-slate-500">Tanggal</span>
+              <span class="text-xs font-semibold text-slate-200" x-text="activeItem.createdAt"></span>
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <a :href="activeItem.adLink" target="_blank" @click="incrementDownload(activeItem)" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-lg shadow-brand-600/20">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Download Server 1 (Safelink)</span>
+            </a>
+
+            <a :href="activeItem.directLink" target="_blank" @click="incrementDownload(activeItem)" class="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 border border-slate-800">
+              <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+              <span>Direct Fast Download (Tanpa Iklan)</span>
+            </a>
+
+            <button @click="copyPostLink(activeItem)" class="w-full py-2.5 px-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+              <span>Bagikan Link Post Ini</span>
+            </button>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 
-  <!-- Admin Auth Modal -->
+  <!-- Admin Auth & Form Modals -->
   <div x-show="showAuthModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-800" @click.away="showAuthModal = false">
-      <h2 class="text-lg font-bold mb-1 text-white">Verifikasi Mode Admin</h2>
-      <p class="text-xs text-slate-400 mb-4">Masukkan GitHub Personal Access Token (PAT) untuk verifikasi akses.</p>
+      <h2 class="text-lg font-bold mb-1 text-white">Login Admin</h2>
+      <p class="text-xs text-slate-400 mb-4">Masukkan GitHub PAT Token Anda.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
-        <div class="mb-4">
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">GitHub PAT Token</label>
-          <input type="password" x-model="inputToken" required placeholder="ghp_xxxxxxxxxxxx" class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
-        </div>
-        
+        <input type="password" x-model="inputToken" required placeholder="ghp_xxxxxxxxxxxx" class="w-full px-3.5 py-2 mb-4 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
         <div class="flex space-x-2">
           <button type="button" @click="showAuthModal = false" class="flex-1 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium">Batal</button>
-          <button type="submit" :disabled="verifying" class="flex-1 py-2 bg-brand-600 text-white rounded-xl text-xs font-medium flex items-center justify-center">
-            <span x-show="!verifying">Verifikasi</span>
-            <span x-show="verifying" class="animate-spin text-xs">🌀</span>
-          </button>
+          <button type="submit" class="flex-1 py-2 bg-brand-600 text-white rounded-xl text-xs font-medium">Verifikasi</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Create / Edit Modal -->
   <div x-show="showFormModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showFormModal = false">
-      <h2 class="text-lg font-bold mb-4 text-white" x-text="isEditMode ? 'Edit File' : 'Tambah File Baru'"></h2>
+      <h2 class="text-lg font-bold mb-4 text-white" x-text="isEditMode ? 'Edit Data File' : 'Tambah File Baru'"></h2>
       
       <form @submit.prevent="saveItem()" class="space-y-3">
         <div>
           <label class="block text-[11px] font-medium text-slate-300 mb-1">Nama File / Aplikasi</label>
-          <input type="text" x-model="formData.title" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+          <input type="text" x-model="formData.title" @input="generateSlug()" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-medium text-slate-300 mb-1">URL Post Slug (misal: scriptbotwav1)</label>
+          <input type="text" x-model="formData.slug" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-brand-400 focus:outline-none focus:border-brand-500 font-mono">
         </div>
 
         <div class="grid grid-cols-3 gap-2">
@@ -271,7 +262,7 @@
           </div>
           <div>
             <label class="block text-[11px] font-medium text-slate-300 mb-1">Ukuran File</label>
-            <input type="text" x-model="formData.fileSize" placeholder="25 MB" required class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+            <input type="text" x-model="formData.fileSize" placeholder="15 MB" required class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
           </div>
           <div>
             <label class="block text-[11px] font-medium text-slate-300 mb-1">Kategori</label>
@@ -290,12 +281,12 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">Link Safelink / Iklan</label>
+          <label class="block text-[11px] font-medium text-slate-300 mb-1">Link Download (Safelink)</label>
           <input type="url" x-model="formData.adLink" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
         </div>
 
         <div>
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">Link Direct / Tanpa Iklan</label>
+          <label class="block text-[11px] font-medium text-slate-300 mb-1">Link Download (Direct)</label>
           <input type="url" x-model="formData.directLink" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
         </div>
 
@@ -303,15 +294,20 @@
           <button type="button" @click="showFormModal = false" class="flex-1 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium">Batal</button>
           <button type="submit" :disabled="loading" class="flex-1 py-2 bg-brand-600 text-white rounded-xl text-xs font-medium flex items-center justify-center">
             <span x-show="!loading">Simpan & Sync</span>
-            <span x-show="loading" class="animate-spin text-xs">🌀 Synchronizing...</span>
+            <span x-show="loading" class="animate-spin text-xs">🌀</span>
           </button>
         </div>
       </form>
     </div>
   </div>
 
+  <div x-show="isAdmin" class="fixed bottom-6 right-6 z-30" x-cloak>
+    <button @click="openCreateModal()" class="p-4 bg-brand-600 text-white rounded-2xl shadow-2xl shadow-brand-500/40 hover:bg-brand-700 active:scale-95 transition-all flex items-center justify-center border border-brand-400/30">
+      <i data-lucide="plus" class="w-6 h-6"></i>
+    </button>
+  </div>
+
   <script>
-    // Konfigurasi Repositori GitHub
     const GITHUB_USER = "USERNAME_GITHUB_ANDA";
     const GITHUB_REPO = "NAMA_REPO_ANDA";
     const FILE_PATH = "database.json";
@@ -323,22 +319,25 @@
         selectedCategory: 'Semua',
         searchQuery: '',
         sortBy: 'newest',
-        page: 1,
-        perPage: 6,
         isAdmin: false,
         showAuthModal: false,
         showFormModal: false,
+        showPostModal: false,
+        activeItem: null,
         isEditMode: false,
         inputToken: '',
         ghToken: '',
         loading: false,
-        verifying: false,
-        formData: { id: '', title: '', version: '', category: 'Apps', fileSize: '', description: '', adLink: '', directLink: '' },
+        formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', adLink: '', directLink: '' },
 
         async initApp() {
           this.ghToken = localStorage.getItem('gh_admin_token') || '';
           if (this.ghToken) this.isAdmin = true;
           await this.fetchData();
+
+          // Check Dynamic URL Routing (/post/:slug)
+          this.handleRouting();
+          window.addEventListener('popstate', () => this.handleRouting());
         },
 
         async fetchData() {
@@ -347,7 +346,56 @@
             this.items = await res.json();
             this.$nextTick(() => lucide.createIcons());
           } catch (e) {
-            console.error("Gagal memuat database JSON", e);
+            console.error("Gagal memuat file database JSON", e);
+          }
+        },
+
+        handleRouting() {
+          const path = window.location.pathname;
+          if (path.startsWith('/post/')) {
+            const slug = path.split('/post/')[1];
+            const found = this.items.find(i => i.slug === slug || i.id === slug);
+            if (found) {
+              this.activeItem = found;
+              this.showPostModal = true;
+            }
+          }
+        },
+
+        openPostModal(item) {
+          this.activeItem = item;
+          this.showPostModal = true;
+          window.history.pushState({}, '', `/post/${item.slug || item.id}`);
+          this.$nextTick(() => lucide.createIcons());
+        },
+
+        closePostModal() {
+          this.showPostModal = false;
+          this.activeItem = null;
+          window.history.pushState({}, '', '/');
+        },
+
+        goHome() {
+          this.closePostModal();
+          this.selectedCategory = 'Semua';
+          this.searchQuery = '';
+        },
+
+        copyPostLink(item) {
+          const fullUrl = `${window.location.origin}/post/${item.slug || item.id}`;
+          navigator.clipboard.writeText(fullUrl);
+          Swal.fire({
+            icon: 'success',
+            title: 'Tautan Post Disalin!',
+            text: fullUrl,
+            timer: 2000,
+            showConfirmButton: false
+          });
+        },
+
+        generateSlug() {
+          if (!this.isEditMode) {
+            this.formData.slug = this.formData.title.toLowerCase().replace(/[^a-z0-9]/g, '');
           }
         },
 
@@ -368,91 +416,35 @@
           }
         },
 
-        get paginatedItems() {
-          const start = (this.page - 1) * this.perPage;
-          return this.filteredItems.slice(start, start + this.perPage);
-        },
-
-        get totalPages() {
-          return Math.ceil(this.filteredItems.length / this.perPage) || 1;
-        },
-
-        get totalDownloads() {
-          return this.items.reduce((acc, curr) => acc + (curr.downloads || 0), 0);
-        },
-
-        resetFilter() {
-          this.selectedCategory = 'Semua';
-          this.searchQuery = '';
-          this.sortBy = 'newest';
-          this.page = 1;
-        },
-
         incrementDownload(item) {
           item.downloads = (item.downloads || 0) + 1;
         },
 
-        copyShareLink(item) {
-          navigator.clipboard.writeText(item.adLink);
-          Swal.fire({
-            icon: 'success',
-            title: 'Tautan Disalin!',
-            text: `Link tautan '${item.title}' telah disalin.`,
-            timer: 1500,
-            showConfirmButton: false
-          });
-        },
-
         toggleAdminModal() {
           if (this.isAdmin) {
-            Swal.fire({
-              title: 'Keluar Mode Admin?',
-              text: "Sesi Admin akan diakhiri.",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Logout',
-              cancelButtonText: 'Batal'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                localStorage.removeItem('gh_admin_token');
-                this.isAdmin = false;
-                this.ghToken = '';
-              }
-            });
+            localStorage.removeItem('gh_admin_token');
+            this.isAdmin = false;
+            this.ghToken = '';
+            Swal.fire({ icon: 'info', title: 'Logout Admin', timer: 1500, showConfirmButton: false });
           } else {
             this.showAuthModal = true;
           }
         },
 
-        async verifyAndSaveToken() {
-          if (!this.inputToken.trim()) return;
-          this.verifying = true;
-
-          try {
-            const testRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}`, {
-              headers: { 'Authorization': `token ${this.inputToken.trim()}` }
-            });
-
-            if (testRes.ok) {
-              this.ghToken = this.inputToken.trim();
-              localStorage.setItem('gh_admin_token', this.ghToken);
-              this.isAdmin = true;
-              this.showAuthModal = false;
-              this.inputToken = '';
-              Swal.fire({ icon: 'success', title: 'Akses Admin Diverifikasi!', timer: 1500, showConfirmButton: false });
-            } else {
-              throw new Error("Token tidak valid atau tidak memiliki akses ke repositori ini.");
-            }
-          } catch (e) {
-            Swal.fire({ icon: 'error', title: 'Gagal Verifikasi', text: e.message });
-          } finally {
-            this.verifying = false;
+        verifyAndSaveToken() {
+          if (this.inputToken.trim()) {
+            this.ghToken = this.inputToken.trim();
+            localStorage.setItem('gh_admin_token', this.ghToken);
+            this.isAdmin = true;
+            this.showAuthModal = false;
+            this.inputToken = '';
+            Swal.fire({ icon: 'success', title: 'Mode Admin Aktif!', timer: 1500, showConfirmButton: false });
           }
         },
 
         openCreateModal() {
           this.isEditMode = false;
-          this.formData = { id: '', title: '', version: '', category: 'Apps', fileSize: '', description: '', adLink: '', directLink: '' };
+          this.formData = { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', adLink: '', directLink: '' };
           this.showFormModal = true;
         },
 
@@ -479,8 +471,7 @@
             updatedItems = [newItemData, ...this.items];
           }
 
-          const actionText = this.isEditMode ? `Update item: ${this.formData.title}` : `Add item: ${this.formData.title}`;
-          const success = await this.commitToGitHub(updatedItems, actionText);
+          const success = await this.commitToGitHub(updatedItems, `Update item: ${this.formData.title}`);
 
           if (success) {
             this.items = updatedItems;
@@ -494,11 +485,10 @@
         async deleteItem(id) {
           Swal.fire({
             title: 'Hapus File Ini?',
-            text: "Data yang dihapus tidak bisa dikembalikan!",
+            text: "Data yang dihapus tidak dapat dikembalikan!",
             icon: 'error',
             showCancelButton: true,
-            confirmButtonText: 'Hapus',
-            cancelButtonText: 'Batal'
+            confirmButtonText: 'Hapus'
           }).then(async (result) => {
             if (result.isConfirmed) {
               const updatedItems = this.items.filter(i => i.id !== id);
@@ -516,8 +506,7 @@
             const getFileRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`, {
               headers: { 'Authorization': `token ${this.ghToken}` }
             });
-            
-            if(!getFileRes.ok) throw new Error("Akses GitHub ditolak. Periksa Token PAT Anda.");
+            if(!getFileRes.ok) throw new Error("Akses GitHub ditolak.");
             
             const fileData = await getFileRes.json();
             const sha = fileData.sha;
@@ -529,19 +518,10 @@
                 'Authorization': `token ${this.ghToken}`,
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({
-                message: commitMessage,
-                content: updatedContentBase64,
-                sha: sha
-              })
+              body: JSON.stringify({ message: commitMessage, content: updatedContentBase64, sha: sha })
             });
 
-            if (putRes.ok) return true;
-            else {
-              const err = await putRes.json();
-              Swal.fire({ icon: 'error', title: 'Gagal Sync GitHub', text: err.message });
-              return false;
-            }
+            return putRes.ok;
           } catch (e) {
             Swal.fire({ icon: 'error', title: 'Error', text: e.message });
             return false;
