@@ -68,12 +68,5 @@
     }
   ],
   "version": "20.0.0",
-  "updatedAt": "2026-09-04",
-  "settings": {
-    "announcement": "",
-    "announcementType": "info",
-    "announcementEnabled": false,
-    "maintenance": false,
-    "maintenanceMessage": "Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi."
-  }
+  "updatedAt": "2026-09-03T17:30:56.341Z"
 }
