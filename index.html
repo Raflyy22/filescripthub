@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V12 - Pusat Download File & Software</title>
+  <title>CloudVault V13 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
-  <meta name="application-name" content="CloudVault V12">
+  <meta name="application-name" content="CloudVault V13">
   <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
@@ -107,16 +107,43 @@
           <i data-lucide="smartphone" class="w-5 h-5"></i>
         </button>
 
-        <button @click="toggleAdminModal()" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/50 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400 flex items-center space-x-2">
-          <i data-lucide="shield-check" :class="isAdmin ? 'text-brand-500' : ''" class="w-5 h-5"></i>
-          <span class="text-xs font-semibold hidden sm:inline" x-text="isAdmin ? 'Admin Active' : 'Login'"></span>
-        </button>
       </div>
     </div>
   </header>
 
-  <!-- Admin Analytics Summary (V10) -->
-  <template x-if="isAdmin">
+  <!-- V13 Private Admin Route -->
+  <section x-show="isAdminRoute && !isAdmin" x-cloak class="min-h-[75vh] flex items-center justify-center px-4 py-12">
+    <div class="glass-card max-w-md w-full rounded-3xl p-7 border border-brand-500/20 text-center">
+      <div class="mx-auto mb-4 w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
+        <i data-lucide="shield-lock" class="w-7 h-7 text-brand-500"></i>
+      </div>
+      <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">Admin Area</h1>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Halaman ini hanya dapat digunakan setelah Admin Key berhasil diverifikasi.</p>
+      <button @click="showAuthModal = true" class="mt-5 w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition-all">Login Admin</button>
+      <button @click="goHome()" class="mt-2 w-full py-3 rounded-xl bg-slate-200 dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-xs font-semibold">Kembali ke Beranda</button>
+    </div>
+  </section>
+
+  <section x-show="isAdminRoute && isAdmin" x-cloak class="max-w-6xl mx-auto px-4 pt-7">
+    <div class="glass-card rounded-2xl p-5 border border-brand-500/20">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black">V13</span>
+            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">Admin Center</h1>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Panel pengelolaan FileScriptHub. Area ini tidak ditampilkan di halaman utama.</p>
+        </div>
+        <div class="flex gap-2">
+          <button @click="goHome()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900">Beranda</button>
+          <button @click="toggleAdminModal()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-red-500/10 text-red-500 border border-red-500/20">Logout</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admin Analytics Summary (V13) -->
+  <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div class="glass-card p-4 rounded-xl border border-brand-500/20 flex items-center space-x-3">
@@ -158,15 +185,15 @@
     </section>
   </template>
 
-  <!-- V12 Admin Quick Tools -->
-  <template x-if="isAdmin">
+  <!-- V13 Admin Quick Tools -->
+  <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-4">
       <div class="glass-card rounded-2xl p-4 border border-brand-500/15">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div>
             <div class="flex items-center gap-2">
               <i data-lucide="wrench" class="w-4 h-4 text-brand-500"></i>
-              <h2 class="text-sm font-bold">Admin Tools V12</h2>
+              <h2 class="text-sm font-bold">Admin Tools V13</h2>
             </div>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola database, backup, dan koneksi GitHub tanpa membuka credential.</p>
           </div>
@@ -314,7 +341,7 @@
   </main>
 
   <!-- Single Post Detail Modal -->
-  <div x-show="showPostModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
+  <div x-show="showPostModal && !isAdminRoute" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto" @click.away="closePostModal()">
       <button @click="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 dark:hover:text-white p-1">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -384,7 +411,7 @@
   </div>
 
   <!-- Admin Category Manager Modal -->
-  <div x-show="showCategoryModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
+  <div x-show="showCategoryModal && isAdmin" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-md w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showCategoryModal = false">
       <h2 class="text-lg font-bold mb-3 text-slate-900 dark:text-white flex items-center space-x-2">
         <i data-lucide="folder-cog" class="w-5 h-5 text-brand-500"></i>
@@ -415,7 +442,7 @@
   </div>
 
   <!-- Create/Edit Form Modal -->
-  <div x-show="showFormModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
+  <div x-show="showFormModal && isAdmin" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-xl w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showFormModal = false">
       <h2 class="text-lg font-bold mb-4 text-slate-900 dark:text-white" x-text="isEditMode ? 'Edit Data File' : 'Tambah File Baru'"></h2>
       
@@ -496,15 +523,15 @@
   </div>
 
   <!-- Admin Auth Modal -->
-  <div x-show="showAuthModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
+  <div x-show="showAuthModal && (isAdminRoute || !isAdminRoute)" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showAuthModal = false">
       <h2 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Login Admin</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Masukkan Admin Key yang sudah Anda set di Netlify Environment Variables.</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V13. Masukkan Admin Key yang tersimpan di Netlify Environment Variables.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
         <input type="password" x-model="inputToken" required placeholder="Masukkan Admin Key" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
         <div class="flex space-x-2">
-          <button type="button" @click="showAuthModal = false" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-medium">Batal</button>
+          <button type="button" @click="isAdminRoute ? goHome() : showAuthModal = false" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-medium">Kembali</button>
           <button type="submit" class="flex-1 py-2 bg-brand-600 text-white rounded-xl text-xs font-medium">Verifikasi</button>
         </div>
       </form>
@@ -512,7 +539,7 @@
   </div>
 
   <!-- Floating Add Button -->
-  <div x-show="isAdmin" class="fixed bottom-6 right-6 z-30" x-cloak>
+  <div x-show="isAdmin && isAdminRoute" class="fixed bottom-6 right-6 z-30" x-cloak>
     <button @click="openCreateModal()" class="p-4 bg-brand-600 text-white rounded-2xl shadow-2xl shadow-brand-500/40 hover:bg-brand-700 active:scale-95 transition-all flex items-center justify-center border border-brand-400/30">
       <i data-lucide="plus" class="w-6 h-6"></i>
     </button>
@@ -520,7 +547,7 @@
 
   <script>
     const API_ENDPOINT = "/.netlify/functions/admin-db";
-    const ADMIN_KEY_STORAGE = "cloudvault_v12_admin_key";
+    const ADMIN_KEY_STORAGE = "cloudvault_v13_admin_key";
     const FILE_PATH = "database.json";
 
     function appData() {
@@ -535,6 +562,7 @@
         favoriteIds: {},
         recentIds: [],
         isAdmin: false,
+        isAdminRoute: false,
         showAuthModal: false,
         showFormModal: false,
         showPostModal: false,
@@ -552,23 +580,56 @@
 
         async initApp() {
           this.adminKey = sessionStorage.getItem(ADMIN_KEY_STORAGE) || '';
+          this.isAdminRoute = window.location.pathname.replace(/\/+$/, '') === '/admin';
           this.darkMode = localStorage.getItem('cloudvault_theme') !== 'light';
           this.restorePersonalization();
-          if (this.adminKey) this.isAdmin = true;
           window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); this.deferredInstallPrompt = event; this.canInstall = true; this.$nextTick(() => lucide.createIcons()); });
           window.addEventListener('appinstalled', () => { this.canInstall = false; this.deferredInstallPrompt = null; });
           await this.fetchData();
           this.restoreLocalStats();
 
+          await this.validateAdminSession();
           this.handleRouting();
-          window.addEventListener('popstate', () => this.handleRouting());
+          window.addEventListener('popstate', async () => {
+            this.isAdminRoute = window.location.pathname.replace(/\/+$/, '') === '/admin';
+            await this.validateAdminSession();
+            this.handleRouting();
+            this.$nextTick(() => lucide.createIcons());
+          });
+          this.$nextTick(() => lucide.createIcons());
+        },
+
+        async validateAdminSession() {
+          this.isAdmin = false;
+          if (!this.adminKey) {
+            this.showAuthModal = this.isAdminRoute;
+            return false;
+          }
+          try {
+            const res = await fetch(API_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-Admin-Key': this.adminKey },
+              body: JSON.stringify({ action: 'verify' })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.ok) throw new Error(data.message || 'Sesi admin tidak valid.');
+            this.isAdmin = true;
+            this.showAuthModal = false;
+            return true;
+          } catch (_) {
+            sessionStorage.removeItem(ADMIN_KEY_STORAGE);
+            this.adminKey = '';
+            this.isAdmin = false;
+            this.showAuthModal = this.isAdminRoute;
+            return false;
+          }
         },
 
         isConfigured() { return true; },
 
         restoreLocalStats() {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v12_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v13_stats') || '{}');
             this.items.forEach(item => {
               if (stats[item.id]?.downloads) item.downloads = Math.max(item.downloads || 0, stats[item.id].downloads);
             });
@@ -577,16 +638,16 @@
 
         persistLocalDownload(item) {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v12_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v13_stats') || '{}');
             stats[item.id] = { ...(stats[item.id] || {}), downloads: item.downloads || 0 };
-            localStorage.setItem('cloudvault_v12_stats', JSON.stringify(stats));
+            localStorage.setItem('cloudvault_v13_stats', JSON.stringify(stats));
           } catch (_) {}
         },
 
         restorePersonalization() {
           try {
-            this.favoriteIds = JSON.parse(localStorage.getItem('cloudvault_v12_favorites') || '{}');
-            this.recentIds = JSON.parse(localStorage.getItem('cloudvault_v12_recent') || '[]');
+            this.favoriteIds = JSON.parse(localStorage.getItem('cloudvault_v13_favorites') || '{}');
+            this.recentIds = JSON.parse(localStorage.getItem('cloudvault_v13_recent') || '[]');
             if (!Array.isArray(this.recentIds)) this.recentIds = [];
           } catch (_) { this.favoriteIds = {}; this.recentIds = []; }
         },
@@ -596,13 +657,13 @@
         toggleFavorite(item) {
           this.favoriteIds[item.id] = !this.favoriteIds[item.id];
           if (!this.favoriteIds[item.id]) delete this.favoriteIds[item.id];
-          localStorage.setItem('cloudvault_v12_favorites', JSON.stringify(this.favoriteIds));
+          localStorage.setItem('cloudvault_v13_favorites', JSON.stringify(this.favoriteIds));
           this.$nextTick(() => lucide.createIcons());
         },
 
         rememberRecent(item) {
           this.recentIds = [item.id, ...this.recentIds.filter(id => id !== item.id)].slice(0, 10);
-          localStorage.setItem('cloudvault_v12_recent', JSON.stringify(this.recentIds));
+          localStorage.setItem('cloudvault_v13_recent', JSON.stringify(this.recentIds));
         },
 
         saveTheme() {
@@ -620,14 +681,14 @@
         },
 
         hasRated(item) {
-          try { return JSON.parse(localStorage.getItem('cloudvault_v12_rated') || '{}')[item.id] === true; } catch (_) { return false; }
+          try { return JSON.parse(localStorage.getItem('cloudvault_v13_rated') || '{}')[item.id] === true; } catch (_) { return false; }
         },
 
         markRated(item) {
           try {
-            const rated = JSON.parse(localStorage.getItem('cloudvault_v12_rated') || '{}');
+            const rated = JSON.parse(localStorage.getItem('cloudvault_v13_rated') || '{}');
             rated[item.id] = true;
-            localStorage.setItem('cloudvault_v12_rated', JSON.stringify(rated));
+            localStorage.setItem('cloudvault_v13_rated', JSON.stringify(rated));
           } catch (_) {}
         },
 
@@ -674,7 +735,17 @@
         },
 
         handleRouting() {
-          const path = window.location.pathname;
+          const path = window.location.pathname.replace(/\/+$/, '') || '/';
+          this.isAdminRoute = path === '/admin';
+          this.showPostModal = false;
+          if (this.isAdminRoute) {
+            this.activeItem = null;
+            document.title = this.isAdmin ? 'Admin Center - CloudVault V13' : 'Admin Login - CloudVault V13';
+            this.showAuthModal = !this.isAdmin;
+            this.$nextTick(() => lucide.createIcons());
+            return;
+          }
+          this.showAuthModal = false;
           if (path.startsWith('/post/')) {
             const slug = path.split('/post/')[1];
             const found = this.items.find(i => i.slug === slug || i.id === slug);
@@ -688,7 +759,7 @@
               this.goHome();
             }
           } else {
-            document.title = "CloudVault V12 - Pusat Download File & Software";
+            document.title = "CloudVault V13 - Pusat Download File & Software";
           }
         },
 
@@ -705,7 +776,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
-          document.title = "CloudVault V12 - Pusat Download File & Software";
+          document.title = "CloudVault V13 - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -757,9 +828,9 @@
 
         reportDeadLink(item) {
           try {
-            const reports = JSON.parse(localStorage.getItem('cloudvault_v12_reports') || '{}');
+            const reports = JSON.parse(localStorage.getItem('cloudvault_v13_reports') || '{}');
             reports[item.id] = { title: item.title, count: (reports[item.id]?.count || 0) + 1, lastReportedAt: new Date().toISOString() };
-            localStorage.setItem('cloudvault_v12_reports', JSON.stringify(reports));
+            localStorage.setItem('cloudvault_v13_reports', JSON.stringify(reports));
           } catch (_) {}
           Swal.fire({
             icon: 'success',
@@ -875,7 +946,7 @@
         },
 
         exportDatabase() {
-          const data = { categories: this.categories, items: this.items, version: '12.0.0', updatedAt: new Date().toISOString() };
+          const data = { categories: this.categories, items: this.items, version: '13.0.0', updatedAt: new Date().toISOString() };
           const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob); const a = document.createElement('a');
           a.href = url; a.download = `filescripthub-backup-v12-${new Date().toISOString().slice(0,10)}.json`; a.click();
@@ -907,7 +978,7 @@
         clearLocalAnalytics() {
           Swal.fire({ icon: 'warning', title: 'Reset data lokal?', text: 'Favorit, riwayat, rating browser, laporan dan statistik lokal akan dihapus dari perangkat ini.', showCancelButton: true, confirmButtonText: 'Reset', cancelButtonText: 'Batal' }).then((r) => {
             if (!r.isConfirmed) return;
-            ['cloudvault_v12_stats','cloudvault_v12_favorites','cloudvault_v12_recent','cloudvault_v12_rated','cloudvault_v12_reports'].forEach(k => localStorage.removeItem(k));
+            ['cloudvault_v13_stats','cloudvault_v13_favorites','cloudvault_v13_recent','cloudvault_v13_rated','cloudvault_v13_reports'].forEach(k => localStorage.removeItem(k));
             this.favoriteIds = {}; this.recentIds = [];
             Swal.fire({ icon: 'success', title: 'Data Lokal Direset', timer: 1400, showConfirmButton: false });
           });
@@ -925,6 +996,9 @@
             sessionStorage.removeItem(ADMIN_KEY_STORAGE);
             this.isAdmin = false;
             this.adminKey = '';
+            this.showAuthModal = false;
+            if (this.isAdminRoute) window.history.pushState({}, '', '/');
+            this.isAdminRoute = false;
             Swal.fire({ icon: 'info', title: 'Logout Admin', timer: 1500, showConfirmButton: false });
           } else {
             this.showAuthModal = true;
@@ -1034,8 +1108,8 @@
         },
 
         async saveDatabase() {
-          const fullData = { categories: this.categories, items: this.items, version: '12.0.0', updatedAt: new Date().toISOString() };
-          return await this.commitToGitHub(fullData, "Update CloudVault Database V12");
+          const fullData = { categories: this.categories, items: this.items, version: '13.0.0', updatedAt: new Date().toISOString() };
+          return await this.commitToGitHub(fullData, "Update CloudVault Database V13");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {

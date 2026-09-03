@@ -1,10 +1,10 @@
 {
-  "name": "CloudVault V12",
-  "short_name": "CloudVault V12",
+  "name": "CloudVault V13",
+  "short_name": "CloudVault V13",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#6366f1",
   "lang": "id",
-  "description": "Pusat download file dan software modern."
+  "description": "Pusat download file dan software modern dengan area admin privat."
 }
