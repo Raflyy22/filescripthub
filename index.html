@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V22 - Pusat Download File & Software</title>
+  <title>CloudVault V21 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
-  <meta name="application-name" content="CloudVault V22">
+  <meta name="application-name" content="CloudVault V21">
   <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
@@ -79,7 +79,7 @@
         </div>
         <div>
           <span class="font-black text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V22</span>
+          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V20</span>
         </div>
       </div>
 
@@ -94,11 +94,6 @@
         <!-- Theme Toggle -->
         <button @click="darkMode = !darkMode; saveTheme()" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-colors">
           <i :data-lucide="darkMode ? 'sun' : 'moon'" class="w-4 h-4"></i>
-        </button>
-
-        <button @click="openProfile()" class="p-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-colors flex items-center gap-1.5" title="Profil & Preferensi">
-          <span class="w-6 h-6 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black flex items-center justify-center" x-text="profileInitial"></span>
-          <span class="hidden sm:inline text-[11px] font-semibold max-w-20 truncate" x-text="profile.name || 'Profil'"></span>
         </button>
 
         <template x-if="isAdmin">
@@ -134,7 +129,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <div class="flex items-center gap-2">
-            <span class="px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black">V22</span>
+            <span class="px-2 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-500 text-[10px] font-black">V20</span>
             <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">Admin Center</h1>
           </div>
           <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Panel pengelolaan FileScriptHub. Area ini tidak ditampilkan di halaman utama.</p>
@@ -143,30 +138,6 @@
           <button @click="goHome()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900">Beranda</button>
           <button @click="toggleAdminModal()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-red-500/10 text-red-500 border border-red-500/20">Logout</button>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- V22 Profile & Preferences -->
-  <section x-show="showProfileModal" x-cloak class="fixed inset-0 z-[60] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4" @keydown.escape.window="showProfileModal=false">
-    <div class="glass-card w-full max-w-md rounded-3xl p-6 border border-brand-500/20 shadow-2xl" @click.stop>
-      <div class="flex items-center justify-between mb-5">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-500 flex items-center justify-center text-lg font-black" x-text="profileInitial"></div>
-          <div><h2 class="text-lg font-extrabold">Profil & Preferensi</h2><p class="text-[11px] text-slate-500 dark:text-slate-400">Tersimpan di perangkat ini.</p></div>
-        </div>
-        <button @click="showProfileModal=false" class="p-2 rounded-xl bg-slate-200 dark:bg-slate-900"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <div class="space-y-4">
-        <label class="block"><span class="text-[11px] font-semibold">Nama tampilan</span><input x-model="profileForm.name" maxlength="30" placeholder="Nama kamu" class="mt-1.5 w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-brand-500"></label>
-        <div class="grid grid-cols-2 gap-3">
-          <label class="block"><span class="text-[11px] font-semibold">Kategori favorit</span><select x-model="profileForm.category" class="mt-1.5 w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs"><option value="Semua">Semua</option><template x-for="cat in categories" :key="cat"><option :value="cat" x-text="cat"></option></template></select></label>
-          <label class="block"><span class="text-[11px] font-semibold">Urutan default</span><select x-model="profileForm.sort" class="mt-1.5 w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs"><option value="newest">Terbaru</option><option value="popular">Terpopuler</option><option value="rating">Rating</option><option value="alphabet">Nama A-Z</option></select></label>
-        </div>
-        <div class="rounded-2xl bg-slate-100/70 dark:bg-slate-900/60 p-4 border border-slate-200 dark:border-slate-800">
-          <div class="flex items-center justify-between"><div><p class="text-xs font-bold">Ringkasan perangkat</p><p class="text-[10px] text-slate-500 mt-1" x-text="favoriteCount + ' favorit • ' + recentCount + ' riwayat' "></p></div><button @click="applyProfilePreferences(); showProfileModal=false" class="px-3 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold">Terapkan</button></div>
-        </div>
-        <button @click="resetProfile()" class="w-full py-2.5 rounded-xl border border-red-500/20 bg-red-500/10 text-red-500 text-xs font-semibold">Reset Profil & Preferensi</button>
       </div>
     </div>
   </section>
@@ -252,12 +223,12 @@
     </section>
   </template>
 
-  <!-- V22 Site Settings -->
+  <!-- V20 Site Settings -->
   <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-4">
       <div class="glass-card rounded-2xl p-4 border border-amber-500/15">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-          <div><div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-amber-500"></i><h2 class="text-sm font-bold">Site Settings V22</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola pengumuman publik dan mode maintenance.</p></div>
+          <div><div class="flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-amber-500"></i><h2 class="text-sm font-bold">Site Settings V21</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola pengumuman publik dan mode maintenance.</p></div>
           <div class="flex flex-wrap gap-2">
             <span class="px-3 py-2 rounded-xl text-xs font-semibold border" :class="siteSettings.maintenance ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'" x-text="siteSettings.maintenance ? 'Maintenance ON' : 'Website Aktif'"></span>
             <button @click="openSiteSettings()" class="px-3 py-2 rounded-xl text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1.5"><i data-lucide="settings-2" class="w-3.5 h-3.5"></i> Pengaturan Situs</button>
@@ -287,12 +258,12 @@
     </section>
   </template>
 
-  <!-- V22 Link Monitor -->
+  <!-- V20 Link Monitor -->
   <template x-if="isAdmin && isAdminRoute">
     <section class="max-w-6xl mx-auto px-4 pt-4">
       <div class="glass-card rounded-2xl p-4 border border-cyan-500/15">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-          <div><div class="flex items-center gap-2"><i data-lucide="link-2" class="w-4 h-4 text-cyan-500"></i><h2 class="text-sm font-bold">Link Monitor V22</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Periksa link download dari server tanpa mengekspos GitHub Token.</p></div>
+          <div><div class="flex items-center gap-2"><i data-lucide="link-2" class="w-4 h-4 text-cyan-500"></i><h2 class="text-sm font-bold">Link Monitor V20</h2></div><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Periksa link download dari server tanpa mengekspos GitHub Token.</p></div>
           <button @click="checkAllLinks()" :disabled="linkCheckLoading" class="px-3 py-2 rounded-xl text-xs font-semibold border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 disabled:opacity-40 flex items-center gap-1.5"><i data-lucide="scan-line" class="w-3.5 h-3.5"></i><span x-text="linkCheckLoading ? 'Memeriksa...' : 'Cek Semua Link'"></span></button>
         </div>
         <div x-show="linkResults.length" x-cloak class="mt-4 space-y-2 max-h-80 overflow-auto">
@@ -668,10 +639,10 @@
     </div>
   </div>
 
-  <!-- V22 Site Settings Modal -->
+  <!-- V20 Site Settings Modal -->
   <div x-show="showSettingsModal && isAdmin" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showSettingsModal = false">
-      <div class="flex items-center justify-between mb-5"><h2 class="text-lg font-bold text-slate-900 dark:text-white">Pengaturan Situs V22</h2><button @click="showSettingsModal=false" class="text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+      <div class="flex items-center justify-between mb-5"><h2 class="text-lg font-bold text-slate-900 dark:text-white">Pengaturan Situs V20</h2><button @click="showSettingsModal=false" class="text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button></div>
       <label class="flex items-center gap-2 text-xs font-semibold mb-3"><input type="checkbox" x-model="settingsForm.announcementEnabled" class="w-4 h-4"> Aktifkan pengumuman</label>
       <textarea x-model="settingsForm.announcement" maxlength="220" rows="3" placeholder="Contoh: File baru sudah tersedia!" class="w-full px-3 py-2.5 mb-3 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white"></textarea>
       <select x-model="settingsForm.announcementType" class="w-full px-3 py-2.5 mb-5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white"><option value="info">Info</option><option value="success">Success</option><option value="warning">Warning</option><option value="danger">Danger</option></select>
@@ -688,7 +659,7 @@
   <div x-show="showAuthModal && (isAdminRoute || !isAdminRoute)" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showAuthModal = false">
       <h2 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Login Admin</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V22. Masukkan Admin Key yang tersimpan di Netlify Environment Variables. Setelah berhasil, key tidak disimpan di browser; sistem memakai sesi HttpOnly sementara.</p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Area admin V21. Masukkan Admin Key yang tersimpan di Netlify Environment Variables. Setelah berhasil, key tidak disimpan di browser; sistem memakai sesi HttpOnly sementara.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
         <input type="password" x-model="inputToken" required placeholder="Masukkan Admin Key" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
@@ -735,9 +706,6 @@
         showPostModal: false,
         showCategoryModal: false,
         showSettingsModal: false,
-        showProfileModal: false,
-        profile: { name: '', category: 'Semua', sort: 'newest' },
-        profileForm: { name: '', category: 'Semua', sort: 'newest' },
         activeItem: null,
         isEditMode: false,
         inputToken: '',
@@ -759,7 +727,6 @@
           this.isAdminRoute = window.location.pathname.replace(/\/+$/, '') === '/admin';
           this.darkMode = localStorage.getItem('cloudvault_theme') !== 'light';
           this.restorePersonalization();
-          this.restoreProfile();
           window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); this.deferredInstallPrompt = event; this.canInstall = true; this.$nextTick(() => lucide.createIcons()); });
           window.addEventListener('appinstalled', () => { this.canInstall = false; this.deferredInstallPrompt = null; });
           await this.fetchData();
@@ -802,7 +769,7 @@
 
         restoreLocalStats() {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v22_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v20_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             this.items.forEach(item => {
               if (stats[item.id]?.downloads) item.downloads = Math.max(item.downloads || 0, stats[item.id].downloads);
             });
@@ -811,9 +778,9 @@
 
         persistLocalDownload(item) {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v22_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v20_stats') || localStorage.getItem('cloudvault_v16_stats') || localStorage.getItem('cloudvault_v15_stats') || '{}');
             stats[item.id] = { ...(stats[item.id] || {}), downloads: item.downloads || 0 };
-            localStorage.setItem('cloudvault_v22_stats', JSON.stringify(stats));
+            localStorage.setItem('cloudvault_v20_stats', JSON.stringify(stats));
           } catch (_) {}
         },
 
@@ -826,13 +793,11 @@
             };
             const legacyFav = read('cloudvault_v15_favorites', {});
             const legacyRecent = read('cloudvault_v15_recent', []);
-            const v21Fav = read('cloudvault_v21_favorites', legacyFav);
-            const v21Recent = read('cloudvault_v21_recent', legacyRecent);
-            this.favoriteIds = read('cloudvault_v22_favorites', v21Fav);
-            this.recentIds = read('cloudvault_v22_recent', v21Recent);
+            this.favoriteIds = read('cloudvault_v20_favorites', legacyFav);
+            this.recentIds = read('cloudvault_v20_recent', legacyRecent);
             if (!Array.isArray(this.recentIds)) this.recentIds = [];
-            localStorage.setItem('cloudvault_v22_favorites', JSON.stringify(this.favoriteIds));
-            localStorage.setItem('cloudvault_v22_recent', JSON.stringify(this.recentIds));
+            localStorage.setItem('cloudvault_v20_favorites', JSON.stringify(this.favoriteIds));
+            localStorage.setItem('cloudvault_v20_recent', JSON.stringify(this.recentIds));
           } catch (_) { this.favoriteIds = {}; this.recentIds = []; }
         },
 
@@ -841,56 +806,13 @@
         toggleFavorite(item) {
           this.favoriteIds[item.id] = !this.favoriteIds[item.id];
           if (!this.favoriteIds[item.id]) delete this.favoriteIds[item.id];
-          localStorage.setItem('cloudvault_v22_favorites', JSON.stringify(this.favoriteIds));
+          localStorage.setItem('cloudvault_v20_favorites', JSON.stringify(this.favoriteIds));
           this.$nextTick(() => lucide.createIcons());
         },
 
         rememberRecent(item) {
           this.recentIds = [item.id, ...this.recentIds.filter(id => id !== item.id)].slice(0, 10);
-          localStorage.setItem('cloudvault_v22_recent', JSON.stringify(this.recentIds));
-        },
-
-        restoreProfile() {
-          try {
-            const raw = localStorage.getItem('cloudvault_v22_profile') || localStorage.getItem('cloudvault_v21_profile');
-            if (raw) this.profile = { ...this.profile, ...JSON.parse(raw) };
-          } catch (_) {}
-          this.profile.name = String(this.profile.name || '').slice(0, 30);
-          this.profileForm = { ...this.profile };
-        },
-
-        get profileInitial() {
-          const name = String(this.profile?.name || '').trim();
-          return (name ? name[0] : 'G').toUpperCase();
-        },
-
-        get favoriteCount() { return Object.keys(this.favoriteIds || {}).length; },
-        get recentCount() { return Array.isArray(this.recentIds) ? this.recentIds.length : 0; },
-
-        openProfile() {
-          this.profileForm = { ...this.profile };
-          this.showProfileModal = true;
-          this.$nextTick(() => lucide.createIcons());
-        },
-
-        applyProfilePreferences() {
-          this.profile = { ...this.profileForm, name: String(this.profileForm.name || '').trim().slice(0, 30) };
-          localStorage.setItem('cloudvault_v22_profile', JSON.stringify(this.profile));
-          this.selectedCategory = this.profile.category || 'Semua';
-          this.sortBy = this.profile.sort || 'newest';
-          this.currentPage = 1;
-          Swal.fire({ icon: 'success', title: 'Preferensi Disimpan', text: 'Preferensi pribadi diterapkan pada perangkat ini.', timer: 1400, showConfirmButton: false });
-        },
-
-        resetProfile() {
-          Swal.fire({ icon: 'warning', title: 'Reset profil?', text: 'Nama dan preferensi pribadi akan dihapus dari perangkat ini.', showCancelButton: true, confirmButtonText: 'Reset', cancelButtonText: 'Batal' }).then((r) => {
-            if (!r.isConfirmed) return;
-            this.profile = { name: '', category: 'Semua', sort: 'newest' };
-            this.profileForm = { ...this.profile };
-            localStorage.removeItem('cloudvault_v22_profile');
-            this.selectedCategory = 'Semua'; this.sortBy = 'newest'; this.currentPage = 1;
-            Swal.fire({ icon: 'success', title: 'Profil Direset', timer: 1200, showConfirmButton: false });
-          });
+          localStorage.setItem('cloudvault_v20_recent', JSON.stringify(this.recentIds));
         },
 
         saveTheme() {
@@ -908,14 +830,14 @@
         },
 
         hasRated(item) {
-          try { return JSON.parse(localStorage.getItem('cloudvault_v22_rated') || localStorage.getItem('cloudvault_v21_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}')[item.id] === true; } catch (_) { return false; }
+          try { return JSON.parse(localStorage.getItem('cloudvault_v20_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}')[item.id] === true; } catch (_) { return false; }
         },
 
         markRated(item) {
           try {
-            const rated = JSON.parse(localStorage.getItem('cloudvault_v22_rated') || localStorage.getItem('cloudvault_v21_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}');
+            const rated = JSON.parse(localStorage.getItem('cloudvault_v20_rated') || localStorage.getItem('cloudvault_v16_rated') || localStorage.getItem('cloudvault_v15_rated') || '{}');
             rated[item.id] = true;
-            localStorage.setItem('cloudvault_v22_rated', JSON.stringify(rated));
+            localStorage.setItem('cloudvault_v20_rated', JSON.stringify(rated));
           } catch (_) {}
         },
 
@@ -934,8 +856,6 @@
               this.siteSettings = { announcement: '', announcementType: 'info', announcementEnabled: false, maintenance: false, maintenanceMessage: 'Website sedang dalam pemeliharaan. Silakan kembali beberapa saat lagi.', ...(data.settings || {}) };
             }
             this.settingsForm = { ...this.siteSettings };
-            if (this.profile?.category) this.selectedCategory = this.profile.category;
-            if (this.profile?.sort) this.sortBy = this.profile.sort;
 
             this.items = this.items.map(item => ({ ...item, status: item.status === 'draft' ? 'draft' : 'published', featured: item.featured === true, publishAt: typeof item.publishAt === 'string' ? item.publishAt : '' }));
             this.tags = [...new Set(this.items.flatMap(item => Array.isArray(item.tags) ? item.tags : []))].sort((a,b) => a.localeCompare(b));
@@ -982,7 +902,7 @@
           this.showPostModal = false;
           if (this.isAdminRoute) {
             this.activeItem = null;
-            document.title = this.isAdmin ? 'Admin Center - CloudVault V22' : 'Admin Login - CloudVault V22';
+            document.title = this.isAdmin ? 'Admin Center - CloudVault V21' : 'Admin Login - CloudVault V21';
             this.showAuthModal = !this.isAdmin;
             this.$nextTick(() => lucide.createIcons());
             return;
@@ -1001,7 +921,7 @@
               this.goHome();
             }
           } else {
-            document.title = "CloudVault V22 - Pusat Download File & Software";
+            document.title = "CloudVault V21 - Pusat Download File & Software";
           }
         },
 
@@ -1019,7 +939,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
-          document.title = "CloudVault V22 - Pusat Download File & Software";
+          document.title = "CloudVault V21 - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -1071,9 +991,9 @@
 
         reportDeadLink(item) {
           try {
-            const reports = JSON.parse(localStorage.getItem('cloudvault_v22_reports') || localStorage.getItem('cloudvault_v15_reports') || '{}');
+            const reports = JSON.parse(localStorage.getItem('cloudvault_v20_reports') || localStorage.getItem('cloudvault_v15_reports') || '{}');
             reports[item.id] = { title: item.title, count: (reports[item.id]?.count || 0) + 1, lastReportedAt: new Date().toISOString() };
-            localStorage.setItem('cloudvault_v22_reports', JSON.stringify(reports));
+            localStorage.setItem('cloudvault_v20_reports', JSON.stringify(reports));
           } catch (_) {}
           Swal.fire({
             icon: 'success',
@@ -1234,10 +1154,10 @@
         },
 
         exportDatabase() {
-          const data = { categories: this.categories, items: this.items, version: '22.0.0', updatedAt: new Date().toISOString(), settings: this.siteSettings };
+          const data = { categories: this.categories, items: this.items, version: '20.0.0', updatedAt: new Date().toISOString() };
           const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
           const url = URL.createObjectURL(blob); const a = document.createElement('a');
-          a.href = url; a.download = `filescripthub-backup-v22-${new Date().toISOString().slice(0,10)}.json`; a.click();
+          a.href = url; a.download = `filescripthub-backup-v20-${new Date().toISOString().slice(0,10)}.json`; a.click();
           setTimeout(() => URL.revokeObjectURL(url), 500);
         },
 
@@ -1316,7 +1236,7 @@
         clearLocalAnalytics() {
           Swal.fire({ icon: 'warning', title: 'Reset data lokal?', text: 'Favorit, riwayat, rating browser, laporan dan statistik lokal akan dihapus dari perangkat ini.', showCancelButton: true, confirmButtonText: 'Reset', cancelButtonText: 'Batal' }).then((r) => {
             if (!r.isConfirmed) return;
-            ['cloudvault_v22_stats','cloudvault_v22_favorites','cloudvault_v22_recent','cloudvault_v22_rated','cloudvault_v22_reports','cloudvault_v16_stats','cloudvault_v16_favorites','cloudvault_v16_recent','cloudvault_v16_rated','cloudvault_v16_reports'].forEach(k => localStorage.removeItem(k));
+            ['cloudvault_v20_stats','cloudvault_v20_favorites','cloudvault_v20_recent','cloudvault_v20_rated','cloudvault_v20_reports','cloudvault_v16_stats','cloudvault_v16_favorites','cloudvault_v16_recent','cloudvault_v16_rated','cloudvault_v16_reports'].forEach(k => localStorage.removeItem(k));
             this.favoriteIds = {}; this.recentIds = [];
             Swal.fire({ icon: 'success', title: 'Data Lokal Direset', timer: 1400, showConfirmButton: false });
           });
@@ -1481,8 +1401,8 @@
         },
 
         async saveDatabase() {
-          const fullData = { categories: this.categories, items: this.items, version: '22.0.0', updatedAt: new Date().toISOString(), settings: this.siteSettings };
-          return await this.commitToGitHub(fullData, "Update FileScriptHub Database V22");
+          const fullData = { categories: this.categories, items: this.items, version: '20.0.0', updatedAt: new Date().toISOString() };
+          return await this.commitToGitHub(fullData, "Update FileScriptHub Database V20");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {
