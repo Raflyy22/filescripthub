@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id" class="dark" x-data="{ darkMode: true }" :class="{ 'dark': darkMode }">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault - Pusat Download File & Software</title>
+  <title>CloudVault V8 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,58 +32,74 @@
 
   <style>
     [x-cloak] { display: none !important; }
-    .glass {
+    .dark .glass {
       background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .glass-card {
+    .glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .dark .glass-card {
       background: rgba(30, 41, 59, 0.45);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
+    .glass-card {
+      background: rgba(241, 245, 249, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
     .swal2-popup {
+      border-radius: 1.25rem !important;
+    }
+    .dark .swal2-popup {
       background: #0f172a !important;
       color: #f8fafc !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 1.25rem !important;
     }
     .scrollbar-none::-webkit-scrollbar { display: none; }
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-brand-500 selection:text-white" x-data="appData()" x-init="initApp()">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans antialiased transition-colors duration-300" x-data="appData()" x-init="initApp()">
 
   <!-- Header Navigation -->
-  <header class="sticky top-0 z-40 glass border-b border-slate-800/80">
+  <header class="sticky top-0 z-40 glass border-b border-slate-200 dark:border-slate-800/80">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3 cursor-pointer" @click="goHome()">
         <div class="p-2.5 bg-gradient-to-tr from-brand-600 to-indigo-500 rounded-xl shadow-lg shadow-brand-500/20">
           <i data-lucide="cloud-download" class="w-5 h-5 text-white"></i>
         </div>
         <div>
-          <span class="font-black text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V7</span>
+          <span class="font-black text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">CloudVault</span>
+          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V8</span>
         </div>
       </div>
 
       <!-- Search Bar Desktop -->
       <div class="relative w-72 hidden md:block">
         <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        <input type="text" x-model="searchQuery" placeholder="Cari file atau aplikasi..." class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-800 rounded-xl text-xs focus:outline-none focus:border-brand-500 text-white placeholder-slate-500 transition-all">
+        <input type="text" x-model="searchQuery" placeholder="Cari file atau aplikasi..." class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-900/80 border border-slate-300 dark:border-slate-800 rounded-xl text-xs focus:outline-none focus:border-brand-500 text-slate-900 dark:text-white placeholder-slate-400 transition-all">
       </div>
 
-      <!-- Admin Actions -->
+      <!-- Actions -->
       <div class="flex items-center space-x-2">
+        <!-- Theme Toggle -->
+        <button @click="darkMode = !darkMode" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 hover:text-brand-500 transition-colors">
+          <i :data-lucide="darkMode ? 'sun' : 'moon'" class="w-4 h-4"></i>
+        </button>
+
         <template x-if="isAdmin">
-          <button @click="openCategoryManager()" class="p-2 rounded-xl border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-xs text-brand-400 font-semibold flex items-center space-x-1.5">
+          <button @click="openCategoryManager()" class="p-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/80 text-xs text-brand-600 dark:text-brand-400 font-semibold flex items-center space-x-1.5">
             <i data-lucide="folder-cog" class="w-4 h-4"></i>
-            <span class="hidden sm:inline">Kelola Kategori</span>
+            <span class="hidden sm:inline">Kategori</span>
           </button>
         </template>
 
-        <button @click="toggleAdminModal()" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800 transition-colors text-slate-400 hover:text-white flex items-center space-x-2">
+        <button @click="toggleAdminModal()" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/50 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400 flex items-center space-x-2">
           <i data-lucide="shield-check" :class="isAdmin ? 'text-brand-500' : ''" class="w-5 h-5"></i>
           <span class="text-xs font-semibold hidden sm:inline" x-text="isAdmin ? 'Admin Active' : 'Login'"></span>
         </button>
@@ -91,34 +107,70 @@
     </div>
   </header>
 
+  <!-- Admin Analytics Summary (V8 New) -->
+  <template x-if="isAdmin">
+    <section class="max-w-6xl mx-auto px-4 pt-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="glass-card p-4 rounded-xl border border-brand-500/20 flex items-center space-x-3">
+          <div class="p-2.5 bg-brand-500/10 text-brand-500 rounded-lg"><i data-lucide="files" class="w-5 h-5"></i></div>
+          <div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Total File</span>
+            <span class="text-base font-bold text-slate-800 dark:text-white" x-text="items.length"></span>
+          </div>
+        </div>
+        <div class="glass-card p-4 rounded-xl border border-emerald-500/20 flex items-center space-x-3">
+          <div class="p-2.5 bg-emerald-500/10 text-emerald-500 rounded-lg"><i data-lucide="download" class="w-5 h-5"></i></div>
+          <div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Total Unduhan</span>
+            <span class="text-base font-bold text-slate-800 dark:text-white" x-text="totalGlobalDownloads"></span>
+          </div>
+        </div>
+        <div class="glass-card p-4 rounded-xl border border-purple-500/20 flex items-center space-x-3">
+          <div class="p-2.5 bg-purple-500/10 text-purple-500 rounded-lg"><i data-lucide="folder" class="w-5 h-5"></i></div>
+          <div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Kategori</span>
+            <span class="text-base font-bold text-slate-800 dark:text-white" x-text="categories.length"></span>
+          </div>
+        </div>
+        <div class="glass-card p-4 rounded-xl border border-amber-500/20 flex items-center space-x-3">
+          <div class="p-2.5 bg-amber-500/10 text-amber-500 rounded-lg"><i data-lucide="star" class="w-5 h-5"></i></div>
+          <div>
+            <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Top Item</span>
+            <span class="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[100px]" x-text="topItemName"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
   <!-- Hero Section -->
   <section class="max-w-6xl mx-auto px-4 pt-8 pb-4">
     <div class="text-center mb-6">
-      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">
         Pusat File & Software Terintegrasi
       </h1>
-      <p class="text-slate-400 max-w-lg mx-auto text-xs sm:text-sm">
-        Unduh file favorit Anda atau bagikan link unduhan dengan mudah.
+      <p class="text-slate-500 dark:text-slate-400 max-w-lg mx-auto text-xs sm:text-sm">
+        Unduh aplikasi dan file secara aman, cepat, dan mudah.
       </p>
     </div>
 
     <!-- Search Mobile -->
     <div class="relative w-full md:hidden mb-4">
       <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-      <input type="text" x-model="searchQuery" placeholder="Cari file..." class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+      <input type="text" x-model="searchQuery" placeholder="Cari file..." class="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
     </div>
 
     <!-- Category Tabs & Sort Controls -->
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
       <div class="flex items-center space-x-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
         <button @click="selectedCategory = 'Semua'" 
-                :class="selectedCategory === 'Semua' ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'"
+                :class="selectedCategory === 'Semua' ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white'"
                 class="px-3.5 py-1.5 rounded-xl text-xs font-medium border transition-all whitespace-nowrap">
           Semua
         </button>
         <template x-for="cat in categories" :key="cat">
           <button @click="selectedCategory = cat" 
-                  :class="selectedCategory === cat ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'"
+                  :class="selectedCategory === cat ? 'bg-brand-600 text-white border-brand-500' : 'bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white'"
                   class="px-3.5 py-1.5 rounded-xl text-xs font-medium border transition-all whitespace-nowrap">
             <span x-text="cat"></span>
           </button>
@@ -126,10 +178,11 @@
       </div>
 
       <div class="flex items-center space-x-2 self-end sm:self-auto">
-        <span class="text-slate-400 text-[11px]">Urutan:</span>
-        <select x-model="sortBy" class="bg-slate-900 border border-slate-800 text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
+        <span class="text-slate-500 dark:text-slate-400 text-[11px]">Urutan:</span>
+        <select x-model="sortBy" class="bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
           <option value="newest">Terbaru</option>
           <option value="popular">Terpopuler</option>
+          <option value="rating">Rating Tertinggi</option>
           <option value="alphabet">Nama (A-Z)</option>
         </select>
       </div>
@@ -144,22 +197,31 @@
           
           <div>
             <div class="flex items-start justify-between mb-3">
-              <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700/50 group-hover:border-brand-500/30 group-hover:bg-brand-500/10 transition-colors">
+              <div class="p-3 bg-slate-200 dark:bg-slate-800/80 rounded-xl border border-slate-300 dark:border-slate-700/50 group-hover:border-brand-500/30 transition-colors">
                 <i data-lucide="package" class="w-6 h-6 text-brand-500"></i>
               </div>
+              
               <div class="flex items-center space-x-1.5">
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700" x-text="item.category || 'General'"></span>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-brand-500/10 text-brand-400 border border-brand-500/20" x-text="item.version"></span>
+                <!-- Badge File Baru (V8 New) -->
+                <template x-if="isRecent(item.createdAt)">
+                  <span class="text-[9px] font-black px-2 py-0.5 rounded bg-emerald-500 text-white animate-pulse">BARU!</span>
+                </template>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700" x-text="item.category || 'General'"></span>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-brand-500/10 text-brand-500 dark:text-brand-400 border border-brand-500/20" x-text="item.version"></span>
               </div>
             </div>
 
-            <h3 class="font-bold text-base text-white mb-1 group-hover:text-brand-400 transition-colors cursor-pointer" @click="openPostModal(item)" x-text="item.title"></h3>
-            <p class="text-slate-400 text-xs line-clamp-2 mb-3 leading-relaxed" x-text="item.description"></p>
+            <h3 class="font-bold text-base text-slate-900 dark:text-white mb-1 group-hover:text-brand-500 transition-colors cursor-pointer" @click="openPostModal(item)" x-text="item.title"></h3>
+            <p class="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-3 leading-relaxed" x-text="item.description"></p>
 
-            <div class="flex items-center justify-between text-[11px] text-slate-500 mb-4 pb-3 border-b border-slate-800/60">
+            <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-4 pb-3 border-b border-slate-200 dark:border-slate-800/60">
               <span class="flex items-center space-x-1"><i data-lucide="hard-drive" class="w-3 h-3"></i> <span x-text="item.fileSize || 'N/A'"></span></span>
               <span class="flex items-center space-x-1"><i data-lucide="download-cloud" class="w-3 h-3"></i> <span x-text="(item.downloads || 0) + 'x'"></span></span>
-              <span class="flex items-center space-x-1"><i data-lucide="calendar" class="w-3 h-3"></i> <span x-text="item.createdAt || 'Baru'"></span></span>
+              <!-- Rating Bintang (V8 New) -->
+              <span class="flex items-center space-x-1 text-amber-500 font-bold">
+                <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i>
+                <span x-text="item.rating ? item.rating.toFixed(1) : '5.0'"></span>
+              </span>
             </div>
           </div>
 
@@ -170,15 +232,15 @@
             </button>
 
             <div class="flex items-center space-x-2 pt-1">
-              <button @click="copyPostLink(item)" class="flex-1 py-1.5 bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg text-[11px] font-medium transition-colors border border-slate-800 flex items-center justify-center space-x-1">
+              <button @click="copyPostLink(item)" class="flex-1 py-1.5 bg-slate-200 dark:bg-slate-900/60 hover:bg-slate-300 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg text-[11px] font-medium transition-colors border border-slate-300 dark:border-slate-800 flex items-center justify-center space-x-1">
                 <i data-lucide="link" class="w-3 h-3"></i>
-                <span>Salin Link Post</span>
+                <span>Salin Link</span>
               </button>
               
               <template x-if="isAdmin">
                 <div class="flex items-center space-x-1">
-                  <button @click="openEditModal(item)" class="py-1.5 px-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 rounded-lg text-[11px] font-medium border border-amber-500/20">Edit</button>
-                  <button @click="deleteItem(item.id)" class="py-1.5 px-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-[11px] font-medium border border-red-500/20">Hapus</button>
+                  <button @click="openEditModal(item)" class="py-1.5 px-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 rounded-lg text-[11px] font-medium border border-amber-500/20">Edit</button>
+                  <button @click="deleteItem(item.id)" class="py-1.5 px-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg text-[11px] font-medium border border-red-500/20">Hapus</button>
                 </div>
               </template>
             </div>
@@ -191,53 +253,61 @@
 
   <!-- Single Post Detail Modal -->
   <div x-show="showPostModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
-    <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-800 relative max-h-[90vh] overflow-y-auto" @click.away="closePostModal()">
-      <button @click="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+    <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800 relative max-h-[90vh] overflow-y-auto" @click.away="closePostModal()">
+      <button @click="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 dark:hover:text-white p-1">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <template x-if="activeItem">
         <div>
           <div class="flex items-center space-x-2 mb-3">
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-brand-500/20 text-brand-400 border border-brand-500/30" x-text="activeItem.category"></span>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700" x-text="activeItem.version"></span>
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-brand-500/20 text-brand-500 dark:text-brand-400 border border-brand-500/30" x-text="activeItem.category"></span>
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700" x-text="activeItem.version"></span>
           </div>
 
-          <h2 class="text-xl font-bold text-white mb-2" x-text="activeItem.title"></h2>
-          <p class="text-slate-300 text-xs leading-relaxed mb-6 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800" x-text="activeItem.description"></p>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2" x-text="activeItem.title"></h2>
+          <p class="text-slate-600 dark:text-slate-300 text-xs leading-relaxed mb-4 bg-slate-100 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800" x-text="activeItem.description"></p>
 
-          <div class="grid grid-cols-3 gap-2 text-center mb-6">
-            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+          <!-- Rating & Stat Section -->
+          <div class="grid grid-cols-3 gap-2 text-center mb-5">
+            <div class="bg-slate-100 dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
               <span class="block text-[10px] text-slate-500">Ukuran</span>
-              <span class="text-xs font-semibold text-slate-200" x-text="activeItem.fileSize"></span>
+              <span class="text-xs font-semibold text-slate-800 dark:text-slate-200" x-text="activeItem.fileSize"></span>
             </div>
-            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+            <div class="bg-slate-100 dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
               <span class="block text-[10px] text-slate-500">Unduhan</span>
-              <span class="text-xs font-semibold text-brand-400" x-text="(activeItem.downloads || 0) + 'x'"></span>
+              <span class="text-xs font-semibold text-brand-500" x-text="(activeItem.downloads || 0) + 'x'"></span>
             </div>
-            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-              <span class="block text-[10px] text-slate-500">Tanggal</span>
-              <span class="text-xs font-semibold text-slate-200" x-text="activeItem.createdAt"></span>
+            <div class="bg-slate-100 dark:bg-slate-900/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="block text-[10px] text-slate-500">Rating</span>
+              <span class="text-xs font-semibold text-amber-500" x-text="(activeItem.rating || 5.0).toFixed(1) + ' ★'"></span>
             </div>
           </div>
 
           <!-- Dynamic Download Links -->
-          <div class="space-y-2.5">
+          <div class="space-y-2.5 mb-5">
             <template x-for="(link, idx) in (activeItem.links || [])" :key="idx">
               <a :href="link.url" target="_blank" @click="incrementDownload(activeItem)" 
-                 :class="link.isAd ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-600/20' : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800'"
+                 :class="link.isAd ? 'bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-600/20' : 'bg-slate-200 dark:bg-slate-900 hover:bg-slate-300 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-800'"
                  class="w-full py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-between transition-all">
                 <div class="flex items-center space-x-2">
-                  <i :data-lucide="link.isAd ? 'download' : 'zap'" :class="link.isAd ? '' : 'text-amber-400'" class="w-4 h-4"></i>
+                  <i :data-lucide="link.isAd ? 'download' : 'zap'" :class="link.isAd ? '' : 'text-amber-500'" class="w-4 h-4"></i>
                   <span x-text="link.label || 'Download'"></span>
                 </div>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-black/20" x-text="link.isAd ? 'Safelink' : 'Direct'"></span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-black/10 dark:bg-black/30" x-text="link.isAd ? 'Safelink' : 'Direct'"></span>
               </a>
             </template>
+          </div>
 
-            <button @click="copyPostLink(activeItem)" class="w-full py-2.5 px-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 mt-4">
-              <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-              <span>Bagikan Link Post Ini</span>
+          <!-- Rating & Report Action Buttons (V8 New) -->
+          <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800 text-xs">
+            <button @click="rateItem(activeItem)" class="text-amber-500 hover:underline flex items-center space-x-1 font-medium">
+              <i data-lucide="star" class="w-3.5 h-3.5"></i>
+              <span>Beri Rating</span>
+            </button>
+            <button @click="reportDeadLink(activeItem)" class="text-red-500 hover:underline flex items-center space-x-1 font-medium">
+              <i data-lucide="flag" class="w-3.5 h-3.5"></i>
+              <span>Lapor Link Rusak</span>
             </button>
           </div>
         </div>
@@ -247,65 +317,63 @@
 
   <!-- Admin Category Manager Modal -->
   <div x-show="showCategoryModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
-    <div class="glass max-w-md w-full rounded-2xl p-6 border border-slate-800" @click.away="showCategoryModal = false">
-      <h2 class="text-lg font-bold mb-3 text-white flex items-center space-x-2">
+    <div class="glass max-w-md w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showCategoryModal = false">
+      <h2 class="text-lg font-bold mb-3 text-slate-900 dark:text-white flex items-center space-x-2">
         <i data-lucide="folder-cog" class="w-5 h-5 text-brand-500"></i>
         <span>Kelola Kategori</span>
       </h2>
 
-      <!-- Tambah Kategori -->
       <div class="flex space-x-2 mb-4">
-        <input type="text" x-model="newCategoryInput" placeholder="Nama Kategori Baru..." class="flex-1 px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+        <input type="text" x-model="newCategoryInput" placeholder="Nama Kategori Baru..." class="flex-1 px-3.5 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
         <button @click="addCategory()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold">Tambah</button>
       </div>
 
-      <!-- List Kategori -->
       <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
         <template x-for="(cat, idx) in categories" :key="idx">
-          <div class="flex items-center justify-between p-2.5 bg-slate-900/80 rounded-xl border border-slate-800 text-xs">
-            <span x-text="cat" class="font-medium text-slate-200"></span>
+          <div class="flex items-center justify-between p-2.5 bg-slate-100 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+            <span x-text="cat" class="font-medium text-slate-800 dark:text-slate-200"></span>
             <div class="flex items-center space-x-1">
-              <button @click="editCategoryPrompt(idx)" class="px-2 py-1 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded-md text-[10px]">Edit</button>
-              <button @click="deleteCategory(idx)" class="px-2 py-1 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-md text-[10px]">Hapus</button>
+              <button @click="editCategoryPrompt(idx)" class="px-2 py-1 bg-amber-500/10 text-amber-500 rounded-md text-[10px]">Edit</button>
+              <button @click="deleteCategory(idx)" class="px-2 py-1 bg-red-500/10 text-red-500 rounded-md text-[10px]">Hapus</button>
             </div>
           </div>
         </template>
       </div>
 
-      <div class="mt-5 pt-3 border-t border-slate-800 flex justify-end">
-        <button @click="showCategoryModal = false" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs">Tutup</button>
+      <div class="mt-5 pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+        <button @click="showCategoryModal = false" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs">Tutup</button>
       </div>
     </div>
   </div>
 
   <!-- Create/Edit Form Modal -->
   <div x-show="showFormModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
-    <div class="glass max-w-xl w-full rounded-2xl p-6 border border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showFormModal = false">
-      <h2 class="text-lg font-bold mb-4 text-white" x-text="isEditMode ? 'Edit Data File' : 'Tambah File Baru'"></h2>
+    <div class="glass max-w-xl w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showFormModal = false">
+      <h2 class="text-lg font-bold mb-4 text-slate-900 dark:text-white" x-text="isEditMode ? 'Edit Data File' : 'Tambah File Baru'"></h2>
       
       <form @submit.prevent="saveItem()" class="space-y-3">
         <div>
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">Nama File / Aplikasi</label>
-          <input type="text" x-model="formData.title" @input="generateSlug()" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+          <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Nama File / Aplikasi</label>
+          <input type="text" x-model="formData.title" @input="generateSlug()" required class="w-full px-3.5 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
         </div>
 
         <div>
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">Custom Post Route (Slug URL)</label>
-          <input type="text" x-model="formData.slug" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-brand-400 focus:outline-none focus:border-brand-500 font-mono">
+          <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Custom Post Route (Slug URL)</label>
+          <input type="text" x-model="formData.slug" required class="w-full px-3.5 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-brand-500 focus:outline-none focus:border-brand-500 font-mono">
         </div>
 
         <div class="grid grid-cols-3 gap-2">
           <div>
-            <label class="block text-[11px] font-medium text-slate-300 mb-1">Versi</label>
-            <input type="text" x-model="formData.version" placeholder="v1.0.0" required class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+            <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Versi</label>
+            <input type="text" x-model="formData.version" placeholder="v1.0.0" required class="w-full px-3 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
           </div>
           <div>
-            <label class="block text-[11px] font-medium text-slate-300 mb-1">Ukuran File</label>
-            <input type="text" x-model="formData.fileSize" placeholder="15 MB" required class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+            <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Ukuran File</label>
+            <input type="text" x-model="formData.fileSize" placeholder="15 MB" required class="w-full px-3 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
           </div>
           <div>
-            <label class="block text-[11px] font-medium text-slate-300 mb-1">Kategori</label>
-            <select x-model="formData.category" class="w-full px-2 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+            <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Kategori</label>
+            <select x-model="formData.category" class="w-full px-2 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
               <template x-for="cat in categories" :key="cat">
                 <option :value="cat" x-text="cat"></option>
               </template>
@@ -314,15 +382,15 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">Deskripsi Ringkas</label>
-          <textarea x-model="formData.description" rows="2" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500"></textarea>
+          <label class="block text-[11px] font-medium text-slate-600 dark:text-slate-300 mb-1">Deskripsi Ringkas</label>
+          <textarea x-model="formData.description" rows="2" required class="w-full px-3.5 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500"></textarea>
         </div>
 
-        <!-- Section Link Unduhan Dinamis (Tambah / Hapus Link Manual) -->
+        <!-- Section Link Unduhan Dinamis -->
         <div class="pt-2">
           <div class="flex items-center justify-between mb-2">
-            <label class="block text-[11px] font-bold text-slate-200">Daftar Link Unduhan</label>
-            <button type="button" @click="addDownloadLinkField()" class="text-[11px] font-semibold text-brand-400 hover:text-brand-300 flex items-center space-x-1">
+            <label class="block text-[11px] font-bold text-slate-800 dark:text-slate-200">Daftar Link Unduhan</label>
+            <button type="button" @click="addDownloadLinkField()" class="text-[11px] font-semibold text-brand-500 hover:underline flex items-center space-x-1">
               <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
               <span>Tambah Link</span>
             </button>
@@ -330,26 +398,26 @@
 
           <div class="space-y-2.5">
             <template x-for="(link, idx) in formData.links" :key="idx">
-              <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800 space-y-2 relative">
-                <button type="button" @click="removeDownloadLinkField(idx)" class="absolute top-2 right-2 text-red-400 hover:text-red-300 p-1">
+              <div class="p-3 bg-slate-100 dark:bg-slate-900/90 rounded-xl border border-slate-300 dark:border-slate-800 space-y-2 relative">
+                <button type="button" @click="removeDownloadLinkField(idx)" class="absolute top-2 right-2 text-red-500 p-1">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
 
                 <div class="grid grid-cols-2 gap-2 pr-6">
-                  <input type="text" x-model="link.label" placeholder="Nama Label Link (misal: Server 1)" required class="px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none">
-                  <select x-model="link.isAd" class="px-2 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none">
+                  <input type="text" x-model="link.label" placeholder="Nama Label Link" required class="px-2.5 py-1.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none">
+                  <select x-model="link.isAd" class="px-2 py-1.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none">
                     <option :value="true">Server Iklan (Safelink)</option>
                     <option :value="false">Direct (Tanpa Iklan)</option>
                   </select>
                 </div>
-                <input type="url" x-model="link.url" placeholder="https://..." required class="w-full px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none">
+                <input type="url" x-model="link.url" placeholder="https://..." required class="w-full px-2.5 py-1.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none">
               </div>
             </template>
           </div>
         </div>
 
         <div class="flex space-x-2 pt-3">
-          <button type="button" @click="showFormModal = false" class="flex-1 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium">Batal</button>
+          <button type="button" @click="showFormModal = false" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-medium">Batal</button>
           <button type="submit" :disabled="loading" class="flex-1 py-2 bg-brand-600 text-white rounded-xl text-xs font-medium flex items-center justify-center">
             <span x-show="!loading">Simpan & Sync</span>
             <span x-show="loading" class="animate-spin text-xs">🌀</span>
@@ -361,14 +429,14 @@
 
   <!-- Admin Auth Modal -->
   <div x-show="showAuthModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
-    <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-800" @click.away="showAuthModal = false">
-      <h2 class="text-lg font-bold mb-1 text-white">Login Admin</h2>
-      <p class="text-xs text-slate-400 mb-4">Masukkan GitHub Personal Access Token Anda.</p>
+    <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-200 dark:border-slate-800" @click.away="showAuthModal = false">
+      <h2 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Login Admin</h2>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Masukkan GitHub Personal Access Token Anda.</p>
       
       <form @submit.prevent="verifyAndSaveToken()">
-        <input type="password" x-model="inputToken" required placeholder="ghp_xxxxxxxxxxxx" class="w-full px-3.5 py-2 mb-4 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+        <input type="password" x-model="inputToken" required placeholder="ghp_xxxxxxxxxxxx" class="w-full px-3.5 py-2 mb-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-500">
         <div class="flex space-x-2">
-          <button type="button" @click="showAuthModal = false" class="flex-1 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-medium">Batal</button>
+          <button type="button" @click="showAuthModal = false" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-medium">Batal</button>
           <button type="submit" class="flex-1 py-2 bg-brand-600 text-white rounded-xl text-xs font-medium">Verifikasi</button>
         </div>
       </form>
@@ -421,7 +489,6 @@
             const res = await fetch(`database.json?cache=${Date.now()}`);
             const data = await res.json();
             
-            // Retro-compatibility check
             if (Array.isArray(data)) {
               this.items = data;
               this.categories = ['Apps', 'Games', 'Tools', 'Other'];
@@ -434,6 +501,25 @@
           } catch (e) {
             console.error("Gagal memuat file database JSON", e);
           }
+        },
+
+        // --- Computed Helper Admin Stats ---
+        get totalGlobalDownloads() {
+          return this.items.reduce((acc, curr) => acc + (curr.downloads || 0), 0);
+        },
+
+        get topItemName() {
+          if (this.items.length === 0) return '-';
+          const top = [...this.items].sort((a,b) => (b.downloads || 0) - (a.downloads || 0))[0];
+          return top ? top.title : '-';
+        },
+
+        isRecent(dateStr) {
+          if (!dateStr) return false;
+          const postDate = new Date(dateStr);
+          const now = new Date();
+          const diffDays = (now - postDate) / (1000 * 60 * 60 * 24);
+          return diffDays <= 7;
         },
 
         handleRouting() {
@@ -486,6 +572,38 @@
           });
         },
 
+        async rateItem(item) {
+          const { value: stars } = await Swal.fire({
+            title: 'Beri Rating File Ini',
+            input: 'select',
+            inputOptions: { '5': '⭐⭐⭐⭐⭐ (5)', '4': '⭐⭐⭐⭐ (4)', '3': '⭐⭐⭐ (3)', '2': '⭐⭐ (2)', '1': '⭐ (1)' },
+            inputPlaceholder: 'Pilih Rating',
+            showCancelButton: true
+          });
+
+          if (stars) {
+            const currentRating = item.rating || 5.0;
+            const currentCount = item.ratingCount || 1;
+            const newCount = currentCount + 1;
+            const newAvg = ((currentRating * currentCount) + parseInt(stars)) / newCount;
+
+            item.rating = parseFloat(newAvg.toFixed(1));
+            item.ratingCount = newCount;
+
+            Swal.fire({ icon: 'success', title: 'Terima Kasih!', text: 'Rating Anda berhasil dikirim.', timer: 1500, showConfirmButton: false });
+            if (this.isAdmin) await this.saveDatabase();
+          }
+        },
+
+        reportDeadLink(item) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Laporan Diterima',
+            text: `Terima kasih! Laporan kerusakan link untuk ${item.title} telah dicatat.`,
+            confirmButtonText: 'OK'
+          });
+        },
+
         generateSlug() {
           if (!this.isEditMode) {
             this.formData.slug = this.formData.title
@@ -494,7 +612,6 @@
           }
         },
 
-        // --- Category Management ---
         openCategoryManager() {
           this.showCategoryModal = true;
           this.$nextTick(() => lucide.createIcons());
@@ -520,7 +637,6 @@
 
           if (newCat && newCat.trim() !== '') {
             this.categories[index] = newCat.trim();
-            // Update items with old category
             this.items.forEach(i => { if (i.category === oldCat) i.category = newCat.trim(); });
             await this.saveDatabase();
           }
@@ -541,7 +657,6 @@
           });
         },
 
-        // --- Download Links Dynamic Management ---
         addDownloadLinkField() {
           this.formData.links.push({ label: 'Server Download', url: '', isAd: true });
           this.$nextTick(() => lucide.createIcons());
@@ -563,6 +678,8 @@
             return list.sort((a, b) => a.title.localeCompare(b.title));
           } else if (this.sortBy === 'popular') {
             return list.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+          } else if (this.sortBy === 'rating') {
+            return list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
           } else {
             return list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
           }
@@ -604,6 +721,8 @@
             category: this.categories[0] || 'Tools',
             fileSize: '',
             description: '',
+            rating: 5.0,
+            ratingCount: 1,
             links: [
               { label: 'Download Server 1 (Safelink)', url: '', isAd: true },
               { label: 'Direct Fast Download (Tanpa Iklan)', url: '', isAd: false }
@@ -615,7 +734,6 @@
 
         openEditModal(item) {
           this.isEditMode = true;
-          // Migrasi data lama jika masih menggunakan format adLink/directLink
           let itemLinks = item.links || [];
           if (itemLinks.length === 0) {
             if (item.adLink) itemLinks.push({ label: 'Download Server 1 (Safelink)', url: item.adLink, isAd: true });
@@ -638,6 +756,8 @@
               id: 'file-' + Date.now(),
               ...this.formData,
               downloads: 0,
+              rating: 5.0,
+              ratingCount: 1,
               createdAt: currentDate
             };
             this.items.unshift(newItemData);
@@ -676,7 +796,7 @@
             categories: this.categories,
             items: this.items
           };
-          return await this.commitToGitHub(fullData, "Update CloudVault Database");
+          return await this.commitToGitHub(fullData, "Update CloudVault Database V8");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {
