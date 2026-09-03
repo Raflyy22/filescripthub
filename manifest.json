@@ -1,10 +1,10 @@
 {
-  "name": "CloudVault V10",
-  "short_name": "CloudVault",
+  "name": "CloudVault V11",
+  "short_name": "CloudVault V11",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#6366f1",
   "lang": "id",
-  "description": "Pusat download file dan software yang cepat dan modern."
+  "description": "Pusat download file dan software modern."
 }
