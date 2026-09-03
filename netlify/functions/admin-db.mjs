@@ -50,6 +50,19 @@ export default async (req) => {
     return json({ ok: true, message: 'Admin key valid.' });
   }
 
+  if (body.action === 'health') {
+    if (!token) return json({ ok: false, message: 'GITHUB_TOKEN belum diset di Netlify.' }, 500);
+    const api = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
+    try {
+      const check = await fetch(api, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'FileScriptHub-V12' } });
+      if (!check.ok) return json({ ok: false, message: `Repository GitHub tidak dapat diakses (${check.status}).` }, check.status);
+      const info = await check.json();
+      return json({ ok: true, message: `Terhubung ke ${info.full_name || `${owner}/${repo}`}.` });
+    } catch (error) {
+      return json({ ok: false, message: 'Gagal menghubungi GitHub.', detail: String(error?.message || error).slice(0, 200) }, 502);
+    }
+  }
+
   if (body.action !== 'save' || !body.data) {
     return json({ ok: false, message: 'Action tidak valid.' }, 400);
   }
@@ -64,7 +77,7 @@ export default async (req) => {
     Authorization: `Bearer ${token}`,
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
-    'User-Agent': 'FileScriptHub-V10'
+    'User-Agent': 'FileScriptHub-V12'
   };
 
   try {

@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault V11 - Pusat Download File & Software</title>
+  <title>CloudVault V12 - Pusat Download File & Software</title>
 
   <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
-  <meta name="application-name" content="CloudVault V11">
+  <meta name="application-name" content="CloudVault V12">
   <meta name="description" content="Pusat download file dan software yang cepat, modern, dan responsif.">
   
   <!-- Tailwind CSS CDN -->
@@ -79,7 +79,7 @@
         </div>
         <div>
           <span class="font-black text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V11</span>
+          <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V12</span>
         </div>
       </div>
 
@@ -102,6 +102,10 @@
             <span class="hidden sm:inline">Kategori</span>
           </button>
         </template>
+
+        <button x-show="canInstall" @click="installPWA()" x-cloak class="p-2.5 rounded-xl border border-brand-500/30 bg-brand-500/10 text-brand-600 dark:text-brand-400 hover:bg-brand-500/20 transition-colors" title="Install aplikasi">
+          <i data-lucide="smartphone" class="w-5 h-5"></i>
+        </button>
 
         <button @click="toggleAdminModal()" class="p-2.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/50 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400 flex items-center space-x-2">
           <i data-lucide="shield-check" :class="isAdmin ? 'text-brand-500' : ''" class="w-5 h-5"></i>
@@ -148,6 +152,41 @@
           <div>
             <span class="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Top Item</span>
             <span class="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[100px]" x-text="topItemName"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- V12 Admin Quick Tools -->
+  <template x-if="isAdmin">
+    <section class="max-w-6xl mx-auto px-4 pt-4">
+      <div class="glass-card rounded-2xl p-4 border border-brand-500/15">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="wrench" class="w-4 h-4 text-brand-500"></i>
+              <h2 class="text-sm font-bold">Admin Tools V12</h2>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Kelola database, backup, dan koneksi GitHub tanpa membuka credential.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button @click="refreshDatabase()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 hover:border-brand-500 flex items-center gap-1.5">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+            </button>
+            <button @click="testGitHubConnection()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+              <i data-lucide="plug-zap" class="w-3.5 h-3.5"></i> Tes GitHub
+            </button>
+            <button @click="exportDatabase()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 flex items-center gap-1.5">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i> Backup JSON
+            </button>
+            <label class="px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="upload" class="w-3.5 h-3.5"></i> Import JSON
+              <input type="file" accept="application/json,.json" class="hidden" @change="importDatabase($event)">
+            </label>
+            <button @click="clearLocalAnalytics()" class="px-3 py-2 rounded-xl text-xs font-semibold border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400 flex items-center gap-1.5">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Reset Lokal
+            </button>
           </div>
         </div>
       </div>
@@ -481,7 +520,7 @@
 
   <script>
     const API_ENDPOINT = "/.netlify/functions/admin-db";
-    const ADMIN_KEY_STORAGE = "cloudvault_v11_admin_key";
+    const ADMIN_KEY_STORAGE = "cloudvault_v12_admin_key";
     const FILE_PATH = "database.json";
 
     function appData() {
@@ -505,6 +544,8 @@
         inputToken: '',
         ghToken: '',
         adminKey: '',
+        canInstall: false,
+        deferredInstallPrompt: null,
         newCategoryInput: '',
         loading: false,
         formData: { id: '', slug: '', title: '', version: '', category: 'Tools', fileSize: '', description: '', links: [] },
@@ -514,6 +555,8 @@
           this.darkMode = localStorage.getItem('cloudvault_theme') !== 'light';
           this.restorePersonalization();
           if (this.adminKey) this.isAdmin = true;
+          window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); this.deferredInstallPrompt = event; this.canInstall = true; this.$nextTick(() => lucide.createIcons()); });
+          window.addEventListener('appinstalled', () => { this.canInstall = false; this.deferredInstallPrompt = null; });
           await this.fetchData();
           this.restoreLocalStats();
 
@@ -525,7 +568,7 @@
 
         restoreLocalStats() {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v11_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v12_stats') || '{}');
             this.items.forEach(item => {
               if (stats[item.id]?.downloads) item.downloads = Math.max(item.downloads || 0, stats[item.id].downloads);
             });
@@ -534,16 +577,16 @@
 
         persistLocalDownload(item) {
           try {
-            const stats = JSON.parse(localStorage.getItem('cloudvault_v11_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('cloudvault_v12_stats') || '{}');
             stats[item.id] = { ...(stats[item.id] || {}), downloads: item.downloads || 0 };
-            localStorage.setItem('cloudvault_v11_stats', JSON.stringify(stats));
+            localStorage.setItem('cloudvault_v12_stats', JSON.stringify(stats));
           } catch (_) {}
         },
 
         restorePersonalization() {
           try {
-            this.favoriteIds = JSON.parse(localStorage.getItem('cloudvault_v11_favorites') || '{}');
-            this.recentIds = JSON.parse(localStorage.getItem('cloudvault_v11_recent') || '[]');
+            this.favoriteIds = JSON.parse(localStorage.getItem('cloudvault_v12_favorites') || '{}');
+            this.recentIds = JSON.parse(localStorage.getItem('cloudvault_v12_recent') || '[]');
             if (!Array.isArray(this.recentIds)) this.recentIds = [];
           } catch (_) { this.favoriteIds = {}; this.recentIds = []; }
         },
@@ -553,13 +596,13 @@
         toggleFavorite(item) {
           this.favoriteIds[item.id] = !this.favoriteIds[item.id];
           if (!this.favoriteIds[item.id]) delete this.favoriteIds[item.id];
-          localStorage.setItem('cloudvault_v11_favorites', JSON.stringify(this.favoriteIds));
+          localStorage.setItem('cloudvault_v12_favorites', JSON.stringify(this.favoriteIds));
           this.$nextTick(() => lucide.createIcons());
         },
 
         rememberRecent(item) {
           this.recentIds = [item.id, ...this.recentIds.filter(id => id !== item.id)].slice(0, 10);
-          localStorage.setItem('cloudvault_v11_recent', JSON.stringify(this.recentIds));
+          localStorage.setItem('cloudvault_v12_recent', JSON.stringify(this.recentIds));
         },
 
         saveTheme() {
@@ -577,14 +620,14 @@
         },
 
         hasRated(item) {
-          try { return JSON.parse(localStorage.getItem('cloudvault_v11_rated') || '{}')[item.id] === true; } catch (_) { return false; }
+          try { return JSON.parse(localStorage.getItem('cloudvault_v12_rated') || '{}')[item.id] === true; } catch (_) { return false; }
         },
 
         markRated(item) {
           try {
-            const rated = JSON.parse(localStorage.getItem('cloudvault_v11_rated') || '{}');
+            const rated = JSON.parse(localStorage.getItem('cloudvault_v12_rated') || '{}');
             rated[item.id] = true;
-            localStorage.setItem('cloudvault_v11_rated', JSON.stringify(rated));
+            localStorage.setItem('cloudvault_v12_rated', JSON.stringify(rated));
           } catch (_) {}
         },
 
@@ -645,7 +688,7 @@
               this.goHome();
             }
           } else {
-            document.title = "CloudVault V11 - Pusat Download File & Software";
+            document.title = "CloudVault V12 - Pusat Download File & Software";
           }
         },
 
@@ -662,7 +705,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
-          document.title = "CloudVault V11 - Pusat Download File & Software";
+          document.title = "CloudVault V12 - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -714,9 +757,9 @@
 
         reportDeadLink(item) {
           try {
-            const reports = JSON.parse(localStorage.getItem('cloudvault_v11_reports') || '{}');
+            const reports = JSON.parse(localStorage.getItem('cloudvault_v12_reports') || '{}');
             reports[item.id] = { title: item.title, count: (reports[item.id]?.count || 0) + 1, lastReportedAt: new Date().toISOString() };
-            localStorage.setItem('cloudvault_v11_reports', JSON.stringify(reports));
+            localStorage.setItem('cloudvault_v12_reports', JSON.stringify(reports));
           } catch (_) {}
           Swal.fire({
             icon: 'success',
@@ -815,6 +858,66 @@
           item.downloads = (item.downloads || 0) + 1;
           this.persistLocalDownload(item);
           if (this.isAdmin) this.saveDatabase();
+        },
+
+        async refreshDatabase() {
+          await this.fetchData();
+          Swal.fire({ icon: 'success', title: 'Database Diperbarui', text: 'Data terbaru berhasil dimuat.', timer: 1400, showConfirmButton: false });
+        },
+
+        async testGitHubConnection() {
+          try {
+            const res = await fetch(API_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Key': this.adminKey }, body: JSON.stringify({ action: 'health' }) });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.ok) throw new Error(data.message || 'Koneksi GitHub gagal.');
+            Swal.fire({ icon: 'success', title: 'GitHub Terhubung', text: data.message || 'Repository dapat diakses.', timer: 1800, showConfirmButton: false });
+          } catch (e) { Swal.fire({ icon: 'error', title: 'GitHub Bermasalah', text: e.message }); }
+        },
+
+        exportDatabase() {
+          const data = { categories: this.categories, items: this.items, version: '12.0.0', updatedAt: new Date().toISOString() };
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob); const a = document.createElement('a');
+          a.href = url; a.download = `filescripthub-backup-v12-${new Date().toISOString().slice(0,10)}.json`; a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 500);
+        },
+
+        async importDatabase(event) {
+          const file = event.target.files?.[0]; if (!file) return;
+          try {
+            const parsed = JSON.parse(await file.text());
+            if (!Array.isArray(parsed.categories) || !Array.isArray(parsed.items)) throw new Error('Format database tidak valid.');
+            const ids = new Set();
+            for (const item of parsed.items) {
+              if (!item.id || !item.title || ids.has(item.id)) throw new Error('Ada item dengan ID kosong atau duplikat.');
+              ids.add(item.id);
+              item.downloads = Math.max(0, Number(item.downloads) || 0); item.views = Math.max(0, Number(item.views) || 0);
+              item.rating = Math.min(5, Math.max(0, Number(item.rating) || 0));
+            }
+            const result = await Swal.fire({ icon: 'warning', title: 'Import database?', text: `Akan mengganti ${this.items.length} item dengan ${parsed.items.length} item.`, showCancelButton: true, confirmButtonText: 'Import & Simpan', cancelButtonText: 'Batal' });
+            if (!result.isConfirmed) return;
+            this.categories = parsed.categories.map(x => String(x).trim()).filter(Boolean);
+            this.items = parsed.items;
+            const ok = await this.saveDatabase();
+            if (ok) Swal.fire({ icon: 'success', title: 'Import Berhasil', timer: 1600, showConfirmButton: false });
+          } catch (e) { Swal.fire({ icon: 'error', title: 'Import Gagal', text: e.message || 'File JSON tidak dapat dibaca.' }); }
+          event.target.value = '';
+        },
+
+        clearLocalAnalytics() {
+          Swal.fire({ icon: 'warning', title: 'Reset data lokal?', text: 'Favorit, riwayat, rating browser, laporan dan statistik lokal akan dihapus dari perangkat ini.', showCancelButton: true, confirmButtonText: 'Reset', cancelButtonText: 'Batal' }).then((r) => {
+            if (!r.isConfirmed) return;
+            ['cloudvault_v12_stats','cloudvault_v12_favorites','cloudvault_v12_recent','cloudvault_v12_rated','cloudvault_v12_reports'].forEach(k => localStorage.removeItem(k));
+            this.favoriteIds = {}; this.recentIds = [];
+            Swal.fire({ icon: 'success', title: 'Data Lokal Direset', timer: 1400, showConfirmButton: false });
+          });
+        },
+
+        async installPWA() {
+          if (!this.deferredInstallPrompt) return;
+          this.deferredInstallPrompt.prompt();
+          await this.deferredInstallPrompt.userChoice;
+          this.deferredInstallPrompt = null; this.canInstall = false;
         },
 
         toggleAdminModal() {
@@ -931,8 +1034,8 @@
         },
 
         async saveDatabase() {
-          const fullData = { categories: this.categories, items: this.items, version: '11.0.0', updatedAt: new Date().toISOString() };
-          return await this.commitToGitHub(fullData, "Update CloudVault Database V11");
+          const fullData = { categories: this.categories, items: this.items, version: '12.0.0', updatedAt: new Date().toISOString() };
+          return await this.commitToGitHub(fullData, "Update CloudVault Database V12");
         },
 
         async commitToGitHub(fullDataObject, commitMessage) {
