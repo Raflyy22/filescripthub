@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CloudVault - Single Post & Dynamic Route</title>
+  <title>CloudVault - Pusat Download File & Software</title>
 
-  <!-- PWA Meta Tags -->
+  <!-- PWA & Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#020617">
@@ -64,20 +64,20 @@
         </div>
         <div>
           <span class="font-black text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">CloudVault</span>
-          <span class="text-[10px] font-bold text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">URL Route</span>
+          <span class="text-[10px] font-bold text-brand-400 ml-1.5 px-1.5 py-0.5 rounded bg-brand-500/10 border border-brand-500/20">V6</span>
         </div>
       </div>
 
-      <!-- Desktop Search Bar -->
+      <!-- Search Bar Desktop -->
       <div class="relative w-72 hidden md:block">
         <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        <input type="text" x-model="searchQuery" placeholder="Cari file atau aplikasi..." class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-800 rounded-xl text-xs focus:outline-none focus:border-brand-500 text-white placeholder-slate-500 transition-all">
+        <input type="text" x-model="searchQuery" placeholder="Cari file, modul, atau aplikasi..." class="w-full pl-10 pr-4 py-2 bg-slate-900/80 border border-slate-800 rounded-xl text-xs focus:outline-none focus:border-brand-500 text-white placeholder-slate-500 transition-all">
       </div>
 
-      <!-- Admin Toggle Button -->
+      <!-- Admin Button -->
       <button @click="toggleAdminModal()" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800 transition-colors text-slate-400 hover:text-white flex items-center space-x-2">
         <i data-lucide="shield-check" :class="isAdmin ? 'text-brand-500' : ''" class="w-5 h-5"></i>
-        <span class="text-xs font-semibold hidden sm:inline" x-text="isAdmin ? 'Admin Mode' : 'Login'"></span>
+        <span class="text-xs font-semibold hidden sm:inline" x-text="isAdmin ? 'Admin Active' : 'Login Admin'"></span>
       </button>
     </div>
   </header>
@@ -86,11 +86,17 @@
   <section class="max-w-6xl mx-auto px-4 pt-8 pb-4">
     <div class="text-center mb-6">
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-        Pusat Unduhan File & Software
+        Pusat File & Software Terintegrasi
       </h1>
       <p class="text-slate-400 max-w-lg mx-auto text-xs sm:text-sm">
-        Unduh file favorit Anda atau bagikan tautan langsung per postingan file.
+        Unduh file favorit Anda atau bagikan ke orang lain menggunakan link per postingan.
       </p>
+    </div>
+
+    <!-- Search Mobile -->
+    <div class="relative w-full md:hidden mb-4">
+      <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <input type="text" x-model="searchQuery" placeholder="Cari file atau aplikasi..." class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
     </div>
 
     <!-- Category Tabs & Sort Controls -->
@@ -106,7 +112,7 @@
       </div>
 
       <div class="flex items-center space-x-2 self-end sm:self-auto">
-        <span class="text-slate-400 text-[11px]">Urutan:</span>
+        <span class="text-slate-400 text-[11px]">Urutkan:</span>
         <select x-model="sortBy" class="bg-slate-900 border border-slate-800 text-slate-300 rounded-xl text-xs px-3 py-1.5 focus:outline-none focus:border-brand-500">
           <option value="newest">Terbaru</option>
           <option value="popular">Terpopuler</option>
@@ -116,7 +122,7 @@
     </div>
   </section>
 
-  <!-- Content Grid -->
+  <!-- Items Grid -->
   <main class="max-w-6xl mx-auto px-4 pb-24">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       <template x-for="item in filteredItems" :key="item.id">
@@ -144,13 +150,11 @@
           </div>
 
           <div class="space-y-2">
-            <!-- Open Detail Post Page Modal -->
             <button @click="openPostModal(item)" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all active:scale-[0.98]">
               <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-              <span>Lihat Detail & Download</span>
+              <span>Detail & Download</span>
             </button>
 
-            <!-- Share & Admin Controls -->
             <div class="flex items-center space-x-2 pt-1">
               <button @click="copyPostLink(item)" class="flex-1 py-1.5 bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg text-[11px] font-medium transition-colors border border-slate-800 flex items-center justify-center space-x-1">
                 <i data-lucide="link" class="w-3 h-3"></i>
@@ -171,7 +175,7 @@
     </div>
   </main>
 
-  <!-- MODAL / DETAIL POST PAGE (URL Dynamic Display) -->
+  <!-- Single Post Detail Modal -->
   <div x-show="showPostModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-800 relative" @click.away="closePostModal()">
       <button @click="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
@@ -211,7 +215,7 @@
 
             <a :href="activeItem.directLink" target="_blank" @click="incrementDownload(activeItem)" class="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 border border-slate-800">
               <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
-              <span>Direct Fast Download (Tanpa Iklan)</span>
+              <span>Direct Download (Tanpa Iklan)</span>
             </a>
 
             <button @click="copyPostLink(activeItem)" class="w-full py-2.5 px-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2">
@@ -224,7 +228,7 @@
     </div>
   </div>
 
-  <!-- Admin Auth & Form Modals -->
+  <!-- Admin Auth Modal -->
   <div x-show="showAuthModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-sm w-full rounded-2xl p-6 border border-slate-800" @click.away="showAuthModal = false">
       <h2 class="text-lg font-bold mb-1 text-white">Login Admin</h2>
@@ -240,6 +244,7 @@
     </div>
   </div>
 
+  <!-- Create/Edit Form Modal -->
   <div x-show="showFormModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4" x-cloak>
     <div class="glass max-w-lg w-full rounded-2xl p-6 border border-slate-800 max-h-[90vh] overflow-y-auto" @click.away="showFormModal = false">
       <h2 class="text-lg font-bold mb-4 text-white" x-text="isEditMode ? 'Edit Data File' : 'Tambah File Baru'"></h2>
@@ -251,7 +256,7 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-medium text-slate-300 mb-1">URL Post Slug (misal: scriptbotwav1)</label>
+          <label class="block text-[11px] font-medium text-slate-300 mb-1">Custom Post Route (Slug URL)</label>
           <input type="text" x-model="formData.slug" required class="w-full px-3.5 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-brand-400 focus:outline-none focus:border-brand-500 font-mono">
         </div>
 
@@ -301,6 +306,7 @@
     </div>
   </div>
 
+  <!-- Floating Add Button -->
   <div x-show="isAdmin" class="fixed bottom-6 right-6 z-30" x-cloak>
     <button @click="openCreateModal()" class="p-4 bg-brand-600 text-white rounded-2xl shadow-2xl shadow-brand-500/40 hover:bg-brand-700 active:scale-95 transition-all flex items-center justify-center border border-brand-400/30">
       <i data-lucide="plus" class="w-6 h-6"></i>
@@ -335,7 +341,6 @@
           if (this.ghToken) this.isAdmin = true;
           await this.fetchData();
 
-          // Check Dynamic URL Routing (/post/:slug)
           this.handleRouting();
           window.addEventListener('popstate', () => this.handleRouting());
         },
@@ -358,13 +363,19 @@
             if (found) {
               this.activeItem = found;
               this.showPostModal = true;
+              document.title = `${found.title} - Download CloudVault`;
+            } else {
+              this.goHome();
             }
+          } else {
+            document.title = "CloudVault - Pusat Download File & Software";
           }
         },
 
         openPostModal(item) {
           this.activeItem = item;
           this.showPostModal = true;
+          document.title = `${item.title} - Download CloudVault`;
           window.history.pushState({}, '', `/post/${item.slug || item.id}`);
           this.$nextTick(() => lucide.createIcons());
         },
@@ -372,6 +383,7 @@
         closePostModal() {
           this.showPostModal = false;
           this.activeItem = null;
+          document.title = "CloudVault - Pusat Download File & Software";
           window.history.pushState({}, '', '/');
         },
 
@@ -395,7 +407,9 @@
 
         generateSlug() {
           if (!this.isEditMode) {
-            this.formData.slug = this.formData.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+            this.formData.slug = this.formData.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '');
           }
         },
 
